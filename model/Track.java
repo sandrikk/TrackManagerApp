@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class Track {
     private final String firstStation;
     private final String secondStation;
-    private static ArrayList<Track> tracks = readTracksFromCSV();
+    private final static ArrayList<Track> tracks = readTracksFromCSV();
 
     public Track(String firstStation, String secondStation) {
         assert firstStation != null : "Please provide an actual first station";
@@ -29,7 +29,8 @@ public class Track {
             throw new RuntimeException(e);
         }
 
-        String headings = scanner.nextLine();
+        // headings
+        scanner.nextLine();
 
         while (scanner.hasNext()) {
             String rec = scanner.nextLine();
@@ -44,7 +45,7 @@ public class Track {
     }
 
     public static void printTracks() {
-        for (Track t: tracks) {
+        for (Track t: getTracks()) {
             System.out.println(t);
         }
     }

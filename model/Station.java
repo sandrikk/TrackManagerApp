@@ -6,18 +6,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Station {
-    private final int id;
-    private String code;
-    private int uic;
-    private String nameShort;
-    private String nameMedium;
-    private String nameLong;
-    private String slug;
-    private String country;
-    private String type;
+    private final int id, uic;
+    private final String code, slug, country, type;
+    private final String nameShort, nameMedium, nameLong;
     private final double geoLat, geoLng;
 
-    private static ArrayList<Station> stations = readStationsFromCSV();
+    private static final ArrayList<Station> stations = readStationsFromCSV();
 
 
 
@@ -57,7 +51,8 @@ public class Station {
             throw new RuntimeException(e);
         }
 
-        String headings = scanner.nextLine();
+        //headings
+        scanner.nextLine();
 
         while (scanner.hasNext()) {
             String rec = scanner.nextLine();
