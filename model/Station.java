@@ -2,7 +2,6 @@ package model;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Station {
@@ -11,12 +10,10 @@ public class Station {
     private final String nameShort, nameMedium, nameLong;
     private final double geoLat, geoLng;
 
-    private static final ArrayList<Station> stations = readStationsFromCSV();
-
-
+    private static final GenericList<Station> stations = readStationsFromCSV();
 
     public Station(int id, String code, int uic, String nameShort, String nameMedium, String nameLong, String slug, String country, String type, double geoLat, double geoLng) {
-        assert id>0 : "Please provide a positive number";
+        assert id > 0 : "Please provide a positive number";
         this.id = id;
         assert code != null : "Please provide an actual code";
         this.code = code;
@@ -34,16 +31,14 @@ public class Station {
         this.slug = slug;
         assert country != null : "Please provide an actual country code";
         this.country = country.toUpperCase();
-        //assert this.country.length() >=3 : "The country code is too big. Please provide an actual country code.";
-        assert !this.country.isBlank(): "The country code is blank. Please provide an actual country code.";
+        assert !this.country.isBlank() : "The country code is blank. Please provide an actual country code.";
         this.type = type;
         this.geoLat = geoLat;
         this.geoLng = geoLng;
     }
 
-
-    public static ArrayList<Station> readStationsFromCSV() {
-        ArrayList<Station> stations = new ArrayList<>();
+    public static GenericList<Station> readStationsFromCSV() {
+        GenericList<Station> stations = new GenericList<>();
         Scanner scanner;
         try {
             scanner = new Scanner(new File("./resources/stations.csv"));
@@ -51,7 +46,7 @@ public class Station {
             throw new RuntimeException(e);
         }
 
-        //headings
+        // headings
         scanner.nextLine();
 
         while (scanner.hasNext()) {
@@ -76,18 +71,22 @@ public class Station {
     }
 
     public static void printStations() {
-        for (Station s: getStations()) {
+        for (Station s : getStations()) {
             System.out.println(s);
         }
     }
 
-    public static ArrayList<Station> getStations() {
+    public static GenericList<Station> getStations() {
         return stations;
+    }
+
+    public String getName() {
+        return nameShort;
     }
 
     @Override
     public String toString() {
-        return "model.Station{" +
+        return "Station{" +
                 "id=" + id +
                 ", code='" + code + '\'' +
                 ", uic=" + uic +
@@ -102,5 +101,3 @@ public class Station {
                 '}';
     }
 }
-
-
