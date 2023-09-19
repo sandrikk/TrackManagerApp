@@ -1,12 +1,14 @@
-package model;
+package lists;
+import model.Station;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class GenericList<T> implements Iterable<T> {
+public class ListOld<T> implements Iterable<T> {
     private Node<T> head;
     private int size;
 
-    public GenericList() {
+    public ListOld() {
         head = null;
         size = 0;
     }
@@ -40,6 +42,7 @@ public class GenericList<T> implements Iterable<T> {
     public boolean contains(T element) {
         Node<T> current = head;
         while (current != null) {
+
             if (current.data.equals(element)) {
                 return true;
             }
@@ -93,13 +96,16 @@ public class GenericList<T> implements Iterable<T> {
     public Station searchByName(String name) {
         Node<T> current = head;
         while (current != null) {
+
             if (current.data instanceof Station station) {
                 if (station.getName().equals(name)) {
+                    System.out.println(station.getName());
+                    System.out.println(name);
                     return station;
                 }
             }
             current = current.next;
         }
-        return null; // Not found
+        return null;
     }
 }

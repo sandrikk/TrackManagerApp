@@ -1,7 +1,9 @@
 package model;
 
+import lists.DoublyLinkedList;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Scanner;
 
 public class Station {
@@ -10,7 +12,7 @@ public class Station {
     private final String nameShort, nameMedium, nameLong;
     private final double geoLat, geoLng;
 
-    private static final GenericList<Station> stations = readStationsFromCSV();
+    private static final DoublyLinkedList<Station> stations = readStationsFromCSV();
 
     public Station(int id, String code, int uic, String nameShort, String nameMedium, String nameLong, String slug, String country, String type, double geoLat, double geoLng) {
         assert id > 0 : "Please provide a positive number";
@@ -37,8 +39,8 @@ public class Station {
         this.geoLng = geoLng;
     }
 
-    public static GenericList<Station> readStationsFromCSV() {
-        GenericList<Station> stations = new GenericList<>();
+    public static DoublyLinkedList<Station> readStationsFromCSVold() {
+        DoublyLinkedList<Station> stations = new DoublyLinkedList<>();
         Scanner scanner;
         try {
             scanner = new Scanner(new File("./resources/stations.csv"));
@@ -52,6 +54,14 @@ public class Station {
         while (scanner.hasNext()) {
             String rec = scanner.nextLine();
             String[] fields = rec.split(",");
+
+            // Remove double quotes from fields
+            for (int i = 0; i < fields.length; i++) {
+                if (fields[i].startsWith("\"") && fields[i].endsWith("\"")) {
+                    fields[i] = fields[i].substring(1, fields[i].length() - 1);
+                }
+            }
+
             Station newStation = new Station(
                     Integer.parseInt(fields[0]),
                     fields[1],
@@ -70,13 +80,32 @@ public class Station {
         return stations;
     }
 
-    public static void printStations() {
-        for (Station s : getStations()) {
-            System.out.println(s);
+    public static DoublyLinkedList<Station> readStationsFromCSV() {
+        DoublyLinkedList<Station> stations = new DoublyLinkedList<>();
+        CsvReader csvReader = new CsvReader("./resources/stations.csv");
+        List<String[]> csvData = csvReader.readCsv();
+
+        for (String[] fields : csvData) {
+            int id = Integer.parseInt(fields[0]);
+            String code = fields[1];
+            int uic = Integer.parseInt(fields[2]);
+            String nameShort =  fields[3];
+            String nameMedium = fields[4];
+            String nameLong = fields[5];
+            String slug = fields[6];
+            String country = fields[7];
+            String type = fields[8];
+            Double geoLat = Double.parseDouble(fields[9]);
+            Double geoLgn = Double.parseDouble(fields[10]);
+
+            Station newStation = new Station(id, code, uic, nameShort, nameMedium, nameLong, slug, country, type, geoLat, geoLgn);
+            stations.add(newStation);
         }
+
+        return stations;
     }
 
-    public static GenericList<Station> getStations() {
+    public static DoublyLinkedList<Station> getStations() {
         return stations;
     }
 

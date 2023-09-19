@@ -7,7 +7,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            //Station.printStations();
+           // Station.printStations();
             System.out.println("Menu:");
             System.out.println("1. Search for a station by name");
             System.out.println("2. Add a new station");
@@ -21,11 +21,13 @@ public class Main {
             switch (choice) {
                 case 1:
                     Scanner scanner2 = new Scanner(System.in);
-                    System.out.println("Insert name to search: ");
-                    String nameToSearch = scanner2.next();
-                    Station foundStation = Station.getStations().searchByName(nameToSearch);
+                    System.out.print("Insert name to search: ");
+                    String nameToSearch = scanner2.nextLine();
+                    Station foundStation = Station.getStations().search(station -> station.getName().equalsIgnoreCase(nameToSearch));
+
+
                     if (foundStation != null) {
-                        System.out.println("Found station: " + foundStation.toString());
+                        System.out.println("Found station: " + foundStation);
                     } else {
                         System.out.println("Station not found.");
                     }
