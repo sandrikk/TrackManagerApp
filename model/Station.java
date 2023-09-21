@@ -39,50 +39,12 @@ public class Station {
         this.geoLng = geoLng;
     }
 
-    public static DoublyLinkedList<Station> readStationsFromCSVold() {
-        DoublyLinkedList<Station> stations = new DoublyLinkedList<>();
-        Scanner scanner;
-        try {
-            scanner = new Scanner(new File("./resources/stations.csv"));
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
 
-        // headings
-        scanner.nextLine();
-
-        while (scanner.hasNext()) {
-            String rec = scanner.nextLine();
-            String[] fields = rec.split(",");
-
-            // Remove double quotes from fields
-            for (int i = 0; i < fields.length; i++) {
-                if (fields[i].startsWith("\"") && fields[i].endsWith("\"")) {
-                    fields[i] = fields[i].substring(1, fields[i].length() - 1);
-                }
-            }
-
-            Station newStation = new Station(
-                    Integer.parseInt(fields[0]),
-                    fields[1],
-                    Integer.parseInt(fields[2]),
-                    fields[3],
-                    fields[4],
-                    fields[5],
-                    fields[6],
-                    fields[7],
-                    fields[8],
-                    Double.parseDouble(fields[9]),
-                    Double.parseDouble(fields[10]));
-            stations.add(newStation);
-        }
-
-        return stations;
-    }
 
     public static DoublyLinkedList<Station> readStationsFromCSV() {
         DoublyLinkedList<Station> stations = new DoublyLinkedList<>();
-        CsvReader csvReader = new CsvReader("./resources/stations.csv");
+        CsvReader csvReader = new CsvReader("./resources/stations.csv", "^[0-9]*,");
+
         List<String[]> csvData = csvReader.readCsv();
 
         for (String[] fields : csvData) {
@@ -129,4 +91,5 @@ public class Station {
                 ", geoLng=" + geoLng +
                 '}';
     }
+
 }

@@ -2,29 +2,27 @@ package lists;
 
 import java.util.function.Predicate;
 
-public interface List<E> {
+public interface List<T> {
 
-    boolean add(E element);
+    boolean add(T element);
 
-    void add(int index,E element) ;
+    void add(int index,T element) ;
 
-    void clear();
+    boolean contains(T element);
 
-    boolean contains(E element);
+    T get(int index) ;
 
-    E get(int index) ;
-
-    int indexOf(E element);
+    int indexOf(T element);
 
     boolean isEmpty();
 
     boolean remove(int index);
 
-    boolean remove(E element);
+    boolean remove(T element);
 
-    E set(int index, E element);
+    T set(int index, T element);
 
     int size();
 
-    E search(Predicate<E> condition);
+    T search(Predicate<T> condition);
 }
