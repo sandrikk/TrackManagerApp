@@ -10,6 +10,8 @@ public interface List<T> {
 
     boolean contains(T element);
 
+    void clear();
+
     T get(int index) ;
 
     int indexOf(T element);

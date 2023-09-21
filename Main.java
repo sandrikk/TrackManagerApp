@@ -19,6 +19,7 @@ public class Main {
             int choice = scanner.nextInt();
 
             switch (choice) {
+
                 case 1:
                     Scanner scanner2 = new Scanner(System.in);
                     System.out.print("Insert name to search: ");
@@ -33,8 +34,20 @@ public class Main {
                     }
                     break;
                 case 2:
-                    // Implement the add functionality here
+                    Scanner scanner3 = new Scanner(System.in);
+                    System.out.print("Insert stations code: ");
+                    String code = scanner3.nextLine();
+                    Station station = Station.getStationByCode(code); // Replace "ABC123" with the actual station code you want to retrieve
+                    if (station != null) {
+                        // Station found
+                        System.out.println(station);
+                    } else {
+                        // Station with the specified code not found
+                        System.out.println("Station not found");
+                    }
                     break;
+
+
                 case 3:
                     // Implement the remove functionality here
                     break;

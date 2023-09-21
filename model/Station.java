@@ -1,6 +1,8 @@
 package model;
 
 import lists.DoublyLinkedList;
+import lists.HashTable;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -12,7 +14,11 @@ public class Station {
     private final String nameShort, nameMedium, nameLong;
     private final double geoLat, geoLng;
 
+    private static final HashTable<String, Station> stationTable = new HashTable<>();;
+
     private static final DoublyLinkedList<Station> stations = readStationsFromCSV();
+
+
 
     public Station(int id, String code, int uic, String nameShort, String nameMedium, String nameLong, String slug, String country, String type, double geoLat, double geoLng) {
         assert id > 0 : "Please provide a positive number";
@@ -37,6 +43,8 @@ public class Station {
         this.type = type;
         this.geoLat = geoLat;
         this.geoLng = geoLng;
+
+
     }
 
 
@@ -62,13 +70,22 @@ public class Station {
 
             Station newStation = new Station(id, code, uic, nameShort, nameMedium, nameLong, slug, country, type, geoLat, geoLgn);
             stations.add(newStation);
+            stationTable.put(code, newStation);
         }
 
         return stations;
     }
 
+    public String getCode() {
+        return code;
+    }
+
     public static DoublyLinkedList<Station> getStations() {
         return stations;
+    }
+
+    public static Station getStationByCode(String code) {
+        return stationTable.get(code);
     }
 
     public String getName() {

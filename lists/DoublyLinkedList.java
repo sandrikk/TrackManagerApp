@@ -1,21 +1,18 @@
 package lists;
-
-
 import java.util.function.Predicate;
 
-public class DoublyLinkedList<E> implements List<E> {
+public class DoublyLinkedList<T> implements List<T> {
 
-
-    private LinkElement<E> head = null;
-    private LinkElement<E> tail = null;
+    private Node<T> head = null;
+    private Node<T> tail = null;
     private int currentSize = 0;
 
 
-    class LinkElement<E> {
-        DoublyLinkedList<E>.LinkElement<E> next;
+    class Node<E> {
+        DoublyLinkedList<E>.Node<E> next;
         E data;
 
-        public LinkElement(E data) {
+        public Node(E data) {
             this.data = data;
         }
 
@@ -25,26 +22,29 @@ public class DoublyLinkedList<E> implements List<E> {
             }
             next = null;
         }
+
+        public E getData() {
+            return data;
+        }
     }
 
-
     @Override
-    public boolean add(E a) {
-        LinkElement<E> linkElement = new LinkElement<>(a);
+    public boolean add(T t) {
+        Node<T> node = new Node<>(t);
         if (head == null)  {
-            head = linkElement;
-            tail = linkElement;
+            head = node;
+            tail = node;
         } else {
-            tail.next = linkElement;
-            tail = linkElement;
+            tail.next = node;
+            tail = node;
         }
         currentSize++;
         return false;
     }
 
-    private LinkElement<E> getLinkAtIndex(int index) {
+    private Node<T> getLinkAtIndex(int index) {
         assert index < currentSize : "Index out of bounds";
-        LinkElement<E> linkAtIndex = head;
+        Node<T> linkAtIndex = head;
         for (int i =0; i < index; i ++) {
             linkAtIndex = linkAtIndex.next;
         }
@@ -52,17 +52,17 @@ public class DoublyLinkedList<E> implements List<E> {
     }
 
     @Override
-    public void add(int index, E element) throws ArrayIndexOutOfBoundsException {
+    public void add(int index, T element) throws ArrayIndexOutOfBoundsException {
         if (element == null) throw new NullPointerException();
         if (index> currentSize-1) throw  new ArrayIndexOutOfBoundsException();
-        LinkElement<E> linkElement = new LinkElement<>(element);
+        Node<T> linkElement = new Node<>(element);
         currentSize++;
         if (index == 0) {
             linkElement.next = head;
             head = linkElement;
             return;
         }
-        LinkElement<E> insertAt = getLinkAtIndex(index-1);
+        Node<T> insertAt = getLinkAtIndex(index-1);
         linkElement.next = insertAt.next;
         insertAt.next = linkElement;
     }
@@ -75,18 +75,7 @@ public class DoublyLinkedList<E> implements List<E> {
         tail = null;
     }
 
-
-    /**
-     *
-     * recursive function to find an element in the list.
-     *
-     * @param e
-     * @param step
-     * @param data
-     * @return
-     *
-     */
-    private int find(LinkElement<E> e, int step, E data) {
+    private int find(Node<T> e, int step, T data) {
         if (data == null) throw new NullPointerException();
         if (e.data.equals(data)) {
             return step;
@@ -98,20 +87,19 @@ public class DoublyLinkedList<E> implements List<E> {
     }
 
     @Override
-    public boolean contains(E element) {
-        if (find(head,0,element) > -1) return true;
-        return false;
+    public boolean contains(T element) {
+        return find(head, 0, element) > -1;
     }
 
     @Override
-    public E get(int index) throws ArrayIndexOutOfBoundsException {
+    public T get(int index) throws ArrayIndexOutOfBoundsException {
         if (index> currentSize-1) throw  new ArrayIndexOutOfBoundsException();
-        LinkElement<E> linkAtIndex = getLinkAtIndex(index);
+        Node<T> linkAtIndex = getLinkAtIndex(index);
         return linkAtIndex.data;
     }
 
     @Override
-    public int indexOf(E element) {
+    public int indexOf(T element) {
         return find(head,0,element) ;
     }
 
@@ -126,8 +114,8 @@ public class DoublyLinkedList<E> implements List<E> {
         if (index == 0) {
             head = head.next;
         } else {
-            LinkElement<E> toChange = getLinkAtIndex(index - 1);
-            LinkElement<E> toRemove = getLinkAtIndex(index);
+            Node<T> toChange = getLinkAtIndex(index - 1);
+            Node<T> toRemove = getLinkAtIndex(index);
             toChange.next = toRemove.next;
             toRemove.next = null;
         }
@@ -136,7 +124,7 @@ public class DoublyLinkedList<E> implements List<E> {
     }
 
     @Override
-    public boolean remove(E element) {
+    public boolean remove(T element) {
         if (element == null) throw new NullPointerException();
         int i = indexOf(element);
         if (i == -1) return false;
@@ -144,11 +132,11 @@ public class DoublyLinkedList<E> implements List<E> {
     }
 
     @Override
-    public E set(int index, E element) throws ArrayIndexOutOfBoundsException {
+    public T set(int index, T element) throws ArrayIndexOutOfBoundsException {
         if (element == null) throw new NullPointerException();
         if (index > currentSize-1) throw  new ArrayIndexOutOfBoundsException();
-        LinkElement<E> linkToChange = getLinkAtIndex(index);
-        E returnData = linkToChange.data;
+        Node<T> linkToChange = getLinkAtIndex(index);
+        T returnData = linkToChange.data;
         linkToChange.data = element;
         return returnData;
     }
@@ -158,14 +146,14 @@ public class DoublyLinkedList<E> implements List<E> {
         return currentSize;
     }
 
-    public E searchByName(String nameToSearch) {
-        return null;
+    public Node<T> getHead() {
+        return head;
     }
 
 
     // linear search unsorted
-    public E search(Predicate<E> condition) {
-        LinkElement<E> current = head;
+    public T search(Predicate<T> condition) {
+        Node<T> current = head;
         while (current != null) {
             if (condition.test(current.data)) {
                 return current.data;
@@ -174,6 +162,5 @@ public class DoublyLinkedList<E> implements List<E> {
         }
         return null;
     }
-
 
 }
