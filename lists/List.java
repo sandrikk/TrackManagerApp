@@ -18,9 +18,6 @@ public interface List<T> {
 
     boolean isEmpty();
 
-    boolean remove(int index);
-
-    boolean remove(T element);
 
     T set(int index, T element);
 

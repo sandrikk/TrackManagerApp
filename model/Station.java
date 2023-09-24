@@ -79,7 +79,7 @@ public class Station implements Comparable<Station>{
 
         }
 
-        //sortedStations.print();
+        sortedStations.print();
         return stations;
     }
 

@@ -120,28 +120,6 @@ public class DoublyLinkedList<T> implements List<T> {
         return currentSize == 0;
     }
 
-    @Override
-    public boolean remove(int index) throws ArrayIndexOutOfBoundsException {
-        if (index > currentSize-1) throw  new ArrayIndexOutOfBoundsException();
-        if (index == 0) {
-            head = head.next;
-        } else {
-            Node<T> toChange = getNodeAtIndex(index - 1);
-            Node<T> toRemove = getNodeAtIndex(index);
-            toChange.next = toRemove.next;
-            toRemove.next = null;
-        }
-        currentSize--;
-        return true;
-    }
-
-    @Override
-    public boolean remove(T element) {
-        if (element == null) throw new NullPointerException();
-        int i = indexOf(element);
-        if (i == -1) return false;
-        return remove(i);
-    }
 
     @Override
     public T set(int index, T element) throws ArrayIndexOutOfBoundsException {

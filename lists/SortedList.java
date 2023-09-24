@@ -121,16 +121,6 @@ public class SortedList <T extends Comparable<T>> implements List<T> {
     }
 
     @Override
-    public boolean remove(int index) {
-        return false;
-    }
-
-    @Override
-    public boolean remove(T element) {
-        return false;
-    }
-
-    @Override
     public T set(int index, T element) {
         return null;
     }
@@ -149,11 +139,6 @@ public class SortedList <T extends Comparable<T>> implements List<T> {
 
     @Override
     public T search(Predicate<T> condition) {
-        return binarySearch(condition);
-    }
-
-    private T binarySearch(Predicate<T> condition) {
-        Node<T> current = head;
         int left = 0;
         int right = currentSize - 1;
 
@@ -162,20 +147,15 @@ public class SortedList <T extends Comparable<T>> implements List<T> {
             Node<T> middleNode = getNodeAtIndex(middle);
 
             if (condition.test(middleNode.data)) {
-                return middleNode.data;
+                return middleNode.data; // Found a match
             }
 
-            if (condition.test(current.data)) {
-                return current.data;
-            }
-
-            int compareResult = condition.test(middleNode.data) ? 0 : middleNode.data.compareTo(current.data);
+            int compareResult = condition.test(middleNode.data) ? 0 : condition.test(middleNode.data) ? -1 : 1;
 
             if (compareResult < 0) {
                 right = middle - 1;
             } else {
                 left = middle + 1;
-                current = middleNode;
             }
         }
 
