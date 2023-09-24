@@ -8,32 +8,26 @@ import java.util.List;
 public class Station implements Comparable<Station>{
     private final int id, uic;
     private final String code, slug, country, type;
-    private final String nameShort, nameMedium, nameLong;
+    private final String name;
     private final double geoLat, geoLng;
 
-    private static final HashTable<String, Station> stationTable = new HashTable<>();;
+    private static final HashTable<String, Station> stationTable = new HashTable<>();
 
     private static final DoublyLinkedList<Station> stations = readStationsFromCSV();
     private static final SortedList<Station> sortedStations = new SortedList<>();
 
 
 
-    public Station(int id, String code, int uic, String nameShort, String nameMedium, String nameLong, String slug, String country, String type, double geoLat, double geoLng) {
+    public Station(int id, String code, int uic, String name, String slug, String country, String type, double geoLat, double geoLng) {
         assert id > 0 : "Please provide a positive number";
         this.id = id;
         assert code != null : "Please provide an actual code";
         this.code = code;
         assert !this.code.isBlank() : "The code is blank. Please provide an actual code";
         this.uic = uic;
-        assert nameShort != null : "Please provide an actual short name";
-        this.nameShort = nameShort;
-        assert !this.nameShort.isBlank() : "The short name is blank. Please provide an actual short name";
-        assert nameMedium != null : "Please provide an actual medium name";
-        this.nameMedium = nameMedium;
-        assert !this.nameMedium.isBlank() : "The medium name is blank. Please provide an actual medium name";
-        assert nameLong != null : "Please provide an actual long name";
-        this.nameLong = nameLong;
-        assert !this.nameLong.isBlank() : "The long name is blank. Please provide an actual long name";
+        assert name != null : "Please provide an actual short name";
+        this.name = name;
+        assert !this.name.isBlank() : "The short name is blank. Please provide an actual short name";
         this.slug = slug;
         assert country != null : "Please provide an actual country code";
         this.country = country.toUpperCase();
@@ -47,7 +41,7 @@ public class Station implements Comparable<Station>{
 
     @Override
     public int compareTo(Station other) {
-        return this.nameShort.compareTo(other.nameShort);
+        return this.name.compareTo(other.name);
     }
 
 
@@ -63,16 +57,14 @@ public class Station implements Comparable<Station>{
             int id = Integer.parseInt(fields[0]);
             String code = fields[1];
             int uic = Integer.parseInt(fields[2]);
-            String nameShort =  fields[3];
-            String nameMedium = fields[4];
-            String nameLong = fields[5];
+            String name =  fields[3];
             String slug = fields[6];
             String country = fields[7];
             String type = fields[8];
             Double geoLat = Double.parseDouble(fields[9]);
             Double geoLgn = Double.parseDouble(fields[10]);
 
-            Station newStation = new Station(id, code, uic, nameShort, nameMedium, nameLong, slug, country, type, geoLat, geoLgn);
+            Station newStation = new Station(id, code, uic, name, slug, country, type, geoLat, geoLgn);
             stations.add(newStation);
             stationTable.put(code, newStation);
             sortedStations.add(newStation);
@@ -100,7 +92,7 @@ public class Station implements Comparable<Station>{
     }
 
     public String getName() {
-        return nameShort;
+        return name;
     }
 
     @Override
@@ -109,9 +101,7 @@ public class Station implements Comparable<Station>{
                 "id=" + id +
                 ", code='" + code + '\'' +
                 ", uic=" + uic +
-                ", nameShort='" + nameShort + '\'' +
-                ", nameMedium='" + nameMedium + '\'' +
-                ", nameLong='" + nameLong + '\'' +
+                ", name='" + name + '\'' +
                 ", slug='" + slug + '\'' +
                 ", country='" + country + '\'' +
                 ", type='" + type + '\'' +
