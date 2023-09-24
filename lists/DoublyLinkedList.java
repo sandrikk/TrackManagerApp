@@ -1,4 +1,6 @@
 package lists;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.function.Predicate;
 
 public class DoublyLinkedList<T> implements List<T> {
@@ -9,7 +11,8 @@ public class DoublyLinkedList<T> implements List<T> {
 
 
     class Node<E> {
-        DoublyLinkedList<E>.Node<E> next;
+        Node<E> prev;
+        Node<E> next;
         E data;
 
         public Node(E data) {
@@ -18,13 +21,10 @@ public class DoublyLinkedList<T> implements List<T> {
 
         public void disconnect() {
             if (next != null) {
+                next.prev = null;
                 next.disconnect();
             }
             next = null;
-        }
-
-        public E getData() {
-            return data;
         }
     }
 
@@ -36,19 +36,31 @@ public class DoublyLinkedList<T> implements List<T> {
             tail = node;
         } else {
             tail.next = node;
+            node.prev = tail;
             tail = node;
         }
         currentSize++;
         return false;
     }
 
-    private Node<T> getLinkAtIndex(int index) {
+
+    private Node<T> getNodeAtIndex(int index) {
         assert index < currentSize : "Index out of bounds";
-        Node<T> linkAtIndex = head;
-        for (int i =0; i < index; i ++) {
-            linkAtIndex = linkAtIndex.next;
+        Node<T> nodeAtIndex = head;
+        //If the index is closer to the head of the list its more efficient to start from the head and move forward
+        if (index < currentSize / 2) {
+            for (int i = 0; i < index; i++) {
+                nodeAtIndex = nodeAtIndex.next;
+            }
+
+        //Else the index is closer to the tail of the list, it's more efficient to start from the tail and move backward.
+        } else {
+            nodeAtIndex = tail;
+            for (int i = currentSize - 1; i > index; i--) {
+                nodeAtIndex = nodeAtIndex.prev;
+            }
         }
-        return linkAtIndex;
+        return nodeAtIndex;
     }
 
     @Override
@@ -62,7 +74,7 @@ public class DoublyLinkedList<T> implements List<T> {
             head = linkElement;
             return;
         }
-        Node<T> insertAt = getLinkAtIndex(index-1);
+        Node<T> insertAt = getNodeAtIndex(index-1);
         linkElement.next = insertAt.next;
         insertAt.next = linkElement;
     }
@@ -94,7 +106,7 @@ public class DoublyLinkedList<T> implements List<T> {
     @Override
     public T get(int index) throws ArrayIndexOutOfBoundsException {
         if (index> currentSize-1) throw  new ArrayIndexOutOfBoundsException();
-        Node<T> linkAtIndex = getLinkAtIndex(index);
+        Node<T> linkAtIndex = getNodeAtIndex(index);
         return linkAtIndex.data;
     }
 
@@ -114,8 +126,8 @@ public class DoublyLinkedList<T> implements List<T> {
         if (index == 0) {
             head = head.next;
         } else {
-            Node<T> toChange = getLinkAtIndex(index - 1);
-            Node<T> toRemove = getLinkAtIndex(index);
+            Node<T> toChange = getNodeAtIndex(index - 1);
+            Node<T> toRemove = getNodeAtIndex(index);
             toChange.next = toRemove.next;
             toRemove.next = null;
         }
@@ -135,7 +147,7 @@ public class DoublyLinkedList<T> implements List<T> {
     public T set(int index, T element) throws ArrayIndexOutOfBoundsException {
         if (element == null) throw new NullPointerException();
         if (index > currentSize-1) throw  new ArrayIndexOutOfBoundsException();
-        Node<T> linkToChange = getLinkAtIndex(index);
+        Node<T> linkToChange = getNodeAtIndex(index);
         T returnData = linkToChange.data;
         linkToChange.data = element;
         return returnData;
@@ -152,7 +164,10 @@ public class DoublyLinkedList<T> implements List<T> {
 
 
     // linear search unsorted
+
     public T search(Predicate<T> condition) {
+
+
         Node<T> current = head;
         while (current != null) {
             if (condition.test(current.data)) {
@@ -160,7 +175,28 @@ public class DoublyLinkedList<T> implements List<T> {
             }
             current = current.next;
         }
+
         return null;
     }
+
+
+
+    /*
+
+    public T search(Predicate<T> condition) {
+
+        Node<T> current = head;
+        while (current != null) {
+            if (condition.test(current.data)) {
+                return current.data;
+            }
+            current = current.next;
+        }
+
+        return null;
+    }
+
+     */
+
 
 }

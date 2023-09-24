@@ -2,13 +2,10 @@ package model;
 
 import lists.DoublyLinkedList;
 import lists.HashTable;
-
-import java.io.File;
-import java.io.FileNotFoundException;
+import lists.SortedList;
 import java.util.List;
-import java.util.Scanner;
 
-public class Station {
+public class Station implements Comparable<Station>{
     private final int id, uic;
     private final String code, slug, country, type;
     private final String nameShort, nameMedium, nameLong;
@@ -17,6 +14,7 @@ public class Station {
     private static final HashTable<String, Station> stationTable = new HashTable<>();;
 
     private static final DoublyLinkedList<Station> stations = readStationsFromCSV();
+    private static final SortedList<Station> sortedStations = new SortedList<>();
 
 
 
@@ -47,10 +45,16 @@ public class Station {
 
     }
 
+    @Override
+    public int compareTo(Station other) {
+        return this.nameShort.compareTo(other.nameShort);
+    }
+
 
 
     public static DoublyLinkedList<Station> readStationsFromCSV() {
         DoublyLinkedList<Station> stations = new DoublyLinkedList<>();
+        SortedList<Station> sortedStations = new SortedList<>();
         CsvReader csvReader = new CsvReader("./resources/stations.csv", "^[0-9]*,");
 
         List<String[]> csvData = csvReader.readCsv();
@@ -71,8 +75,11 @@ public class Station {
             Station newStation = new Station(id, code, uic, nameShort, nameMedium, nameLong, slug, country, type, geoLat, geoLgn);
             stations.add(newStation);
             stationTable.put(code, newStation);
+            sortedStations.add(newStation);
+
         }
 
+        //sortedStations.print();
         return stations;
     }
 
@@ -82,6 +89,10 @@ public class Station {
 
     public static DoublyLinkedList<Station> getStations() {
         return stations;
+    }
+
+    public static SortedList<Station> getSortedStations() {
+        return sortedStations;
     }
 
     public static Station getStationByCode(String code) {
