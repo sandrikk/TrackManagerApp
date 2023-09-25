@@ -45,11 +45,18 @@ public class Station implements Comparable<Station>{
     }
 
 
+    public double getGeoLat() {
+        return geoLat;
+    }
+
+    public double getGeoLng() {
+        return geoLng;
+    }
 
     public static DoublyLinkedList<Station> readStationsFromCSV() {
         DoublyLinkedList<Station> stations = new DoublyLinkedList<>();
         SortedList<Station> sortedStations = new SortedList<>();
-        CsvReader csvReader = new CsvReader("./resources/stations.csv", "^[0-9]*,");
+        CsvReader csvReader = new CsvReader("./resources/stations.csv", "");
 
         List<String[]> csvData = csvReader.readCsv();
 

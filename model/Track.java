@@ -6,18 +6,20 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Track {
-    private final String firstStation;
-    private final String secondStation;
+    private final Station firstStation;
+    private final Station secondStation;
+    private final double distance;
     private final static ArrayList<Track> tracks = readTracksFromCSV();
 
-    public Track(String firstStation, String secondStation) {
+    public Track(Station firstStation, Station secondStation) {
         assert firstStation != null : "Please provide an actual first station";
         this.firstStation = firstStation;
-        assert !this.firstStation.isBlank() : "The first station is blank. Please provide an actual station";
+        //assert !this.firstStation.isBlank() : "The first station is blank. Please provide an actual station";
         assert secondStation != null : "Please provide an actual second station";
         this.secondStation = secondStation;
-        assert !this.secondStation.isBlank() : "The second station is blank. Please provide an actual station";
+        //assert !this.secondStation.isBlank() : "The second station is blank. Please provide an actual station";
         assert !this.secondStation.equals(this.firstStation);
+        this.distance = calculateDistance(firstStation, secondStation);
     }
 
     public static ArrayList<Track> readTracksFromCSV() {
@@ -52,6 +54,11 @@ public class Track {
 
     public static ArrayList<Track> getTracks() {
         return tracks;
+    }
+
+    private double calculateDistance(Station station1, Station station2) {
+
+        return Math.sqrt(Math.pow(station2.getGeoLat() - station1.getGeoLat(), 2) + Math.pow(station2.getGeoLng() - station1.getGeoLng(), 2));
     }
 
     @Override

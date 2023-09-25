@@ -16,7 +16,6 @@ public class CsvReader {
     public CsvReader(String filePath, String regex) {
         this.filePath = filePath;
         this.pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE); // Compile the regex pattern
-        this.counter = 1;
     }
 
     public List<String[]> readCsv() {
