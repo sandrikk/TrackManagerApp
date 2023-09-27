@@ -1,7 +1,6 @@
 package lists;
 
-import java.time.Duration;
-import java.time.Instant;
+import java.util.Comparator;
 import java.util.function.Predicate;
 
 public class SortedList <T extends Comparable<T>> implements List<T> {
@@ -137,29 +136,33 @@ public class SortedList <T extends Comparable<T>> implements List<T> {
         return linkAtIndex.data;
     }
 
-    @Override
-    public T search(Predicate<T> condition) {
+
+    public T binarySearch(Comparator<T> comparator, T key) {
         int left = 0;
         int right = currentSize - 1;
 
         while (left <= right) {
             int middle = (left + right) / 2;
-            Node<T> middleNode = getNodeAtIndex(middle);
+            T middleElement = get(middle);
 
-            if (condition.test(middleNode.data)) {
-                return middleNode.data; // Found a match
-            }
+            int compareResult = comparator.compare(middleElement, key);
 
-            int compareResult = condition.test(middleNode.data) ? 0 : condition.test(middleNode.data) ? -1 : 1;
-
-            if (compareResult < 0) {
-                right = middle - 1;
-            } else {
+            if (compareResult == 0) {
+                return middleElement; // Found a match
+            } else if (compareResult < 0) {
                 left = middle + 1;
+            } else {
+                right = middle - 1;
             }
         }
 
         return null; // Not found
     }
+
+
+
+
+
+
 
 }

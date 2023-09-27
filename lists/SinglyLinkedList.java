@@ -4,11 +4,11 @@ import model.Station;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class ListOld<T> implements Iterable<T> {
+public class SinglyLinkedList<T> implements Iterable<T> {
     private Node<T> head;
     private int size;
 
-    public ListOld() {
+    public SinglyLinkedList() {
         head = null;
         size = 0;
     }

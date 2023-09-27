@@ -23,5 +23,5 @@ public interface List<T> {
 
     int size();
 
-    T search(Predicate<T> condition);
+
 }

@@ -35,12 +35,15 @@ public class Track {
         scanner.nextLine();
 
         while (scanner.hasNext()) {
+            /*
             String rec = scanner.nextLine();
             String[] fields = rec.split(",");
             Track newTrack = new Track(
                     fields[0],
                     fields[1]);
             tracks.add(newTrack);
+
+             */
         }
 
         return tracks;

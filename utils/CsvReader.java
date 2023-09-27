@@ -1,4 +1,4 @@
-package model;
+package utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,6 +11,8 @@ import java.util.regex.Pattern;
 public class CsvReader {
     private final String filePath;
     private final Pattern pattern; // Add a Pattern field
+    private final String idRegex = "[0-9]+";
+    private final String codeRegex = "[A-Z]+";
     private int counter;
 
     public CsvReader(String filePath, String regex) {

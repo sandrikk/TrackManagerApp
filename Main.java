@@ -1,90 +1,27 @@
-/*
+import lists.DoublyLinkedList;
+import lists.HashTable;
+import lists.SortedList;
 import model.Station;
-import java.time.Duration;
-import java.time.Instant;
+import utils.CsvReader;
+
+import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+    static DoublyLinkedList<Station> stations = new DoublyLinkedList<>();
+    static SortedList<Station> sortedStations = new SortedList<>();
+    static HashTable<String, Station> stationTable = new HashTable<>();
     public static void main(String[] args) {
+        // Call the method to read stations from CSV
+        readStationsFromCSV();
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-           // Station.printStations();
             System.out.println("Menu:");
-            System.out.println("1. Search for a station by name (linear)");
-            System.out.println("2. Search for a station by name (binary)");
-            System.out.println("3. Search for a station by code");
-            System.out.println("4. Sort stations");
-            System.out.println("5. Exit");
-
-            System.out.print("Enter your choice: ");
-            int choice = scanner.nextInt();
-
-            switch (choice) {
-                case 1:
-                    Scanner scanner2 = new Scanner(System.in);
-                    System.out.print("Insert name to search: ");
-                    String nameToSearch = scanner2.nextLine();
-
-                    // linear
-                    Station foundStation = Station.getStations().search(station -> station.getName().equalsIgnoreCase(nameToSearch));
-
-                    if (foundStation != null) {
-                        System.out.println("Found station: " + foundStation);
-                    } else {
-                        System.out.println("Station not found.");
-                    }
-                    break;
-
-                case 2:
-                    Scanner scanner3 = new Scanner(System.in);
-                    System.out.print("Insert stations code: ");
-                    String code = scanner3.nextLine();
-                    Station station = Station.getStationByCode(code); // Replace "ABC123" with the actual station code you want to retrieve
-                    if (station != null) {
-                        // Station found
-                        System.out.println(station);
-                    } else {
-                        // Station with the specified code not found
-                        System.out.println("Station not found");
-                    }
-                    break;
-
-
-                case 3:
-
-                case 4:
-                    // Implement the list functionality here
-                    break;
-                case 5:
-                    System.out.println("Exiting the program.");
-                    scanner.close();
-                    System.exit(0);
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please enter a valid option.");
-                    break;
-            }
-        }
-    }
-}
-
- */
-
-import model.Station;
-
-import java.util.Scanner;
-
-public class Main {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-
-        while (true) {
-            // Station.printStations();
-            System.out.println("Menu:");
-            System.out.println("1. Search for a station by name (linear)");
-            System.out.println("2. Search for a station by code");
-            System.out.println("3.");
+            System.out.println("1. Search for a station by name (linear search)");
+            System.out.println("2. Search for a station by code (hash table)");
+            System.out.println("3. Search for a station by name (binary search)");
             System.out.println("4.");
             System.out.println("5. Exit");
 
@@ -93,15 +30,16 @@ public class Main {
             scanner.nextLine(); // Consume the newline character
 
             switch (choice) {
+
                 case 1:
                     System.out.print("Insert name to search: ");
                     String nameToSearch = scanner.nextLine();
 
                     // linear
-                    Station foundStation = Station.getStations().search(station -> station.getName().equalsIgnoreCase(nameToSearch));
+                    Station foundStationByName = stations.search(station -> station.getName().equalsIgnoreCase(nameToSearch));
 
-                    if (foundStation != null) {
-                        System.out.println("Found station: " + foundStation);
+                    if (foundStationByName != null) {
+                        System.out.println("Found station: " + foundStationByName);
                     } else {
                         System.out.println("Station not found.");
                     }
@@ -109,11 +47,12 @@ public class Main {
 
                 case 2:
                     System.out.print("Insert stations code: ");
-                    String code = scanner.nextLine();
-                    Station station = Station.getStationByCode(code); // Replace "ABC123" with the actual station code you want to retrieve
-                    if (station != null) {
+                    String inputCode = scanner.nextLine();
+                    System.out.println(inputCode);
+                    Station foundStationByCode = stationTable.get(inputCode); // Retrieve foundStationByCode from the table
+                    if (foundStationByCode != null) {
                         // Station found
-                        System.out.println(station);
+                        System.out.println(foundStationByCode);
                     } else {
                         // Station with the specified code not found
                         System.out.println("Station not found");
@@ -122,17 +61,27 @@ public class Main {
 
                 case 3:
                     System.out.print("Insert name to search: ");
-                    String nameToSearch2 = scanner.nextLine();
+                    String nameToSearchSorted = scanner.nextLine();
 
-                    // linear
-                    Station foundStation2 = Station.getSortedStations().search(station2 -> station2.getName().equalsIgnoreCase(nameToSearch2));
+                    // Create a custom Comparator for comparing Station objects by name
+                    Comparator<Station> nameComparator = new Comparator<Station>() {
+                        @Override
+                        public int compare(Station station1, Station station2) {
+                            return station1.getName().compareTo(station2.getName());
+                        }
+                    };
 
-                    if (foundStation2 != null) {
-                        System.out.println("Found station: " + foundStation2);
+                    // Use binary search with the custom nameComparator
+                    Station key = new Station(0, "AA", 0, nameToSearchSorted, "", "Fiction", "", 0.0, 0.0);
+                    Station foundStationInSortedStations = sortedStations.binarySearch(nameComparator, key);
+
+                    if (foundStationInSortedStations != null) {
+                        System.out.println("Found station: " + foundStationInSortedStations);
                     } else {
                         System.out.println("Station not found.");
                     }
                     break;
+
 
                 case 4:
                     // Implement the list functionality here
@@ -150,5 +99,30 @@ public class Main {
             }
         }
     }
-}
 
+    // Move the CSV reading logic here
+    public static void readStationsFromCSV() {
+        CsvReader csvReader = new CsvReader("./resources/stations.csv", "");
+
+        List<String[]> csvData = csvReader.readCsv();
+
+        for (String[] fields : csvData) {
+            int id = Integer.parseInt(fields[0]);
+            String code = fields[1];
+            int uic = Integer.parseInt(fields[2]);
+            String name =  fields[3];
+            String slug = fields[6];
+            String country = fields[7];
+            String type = fields[8];
+            double geoLat = Double.parseDouble(fields[9]);
+            double geoLng = Double.parseDouble(fields[10]);
+
+            Station newStation = new Station(id, code, uic, name, slug, country, type, geoLat, geoLng);
+            stations.add(newStation);
+            sortedStations.add(newStation);
+            stationTable.put(newStation.getCode() ,newStation);
+        }
+
+        sortedStations.print();
+    }
+}
