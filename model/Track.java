@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Track {
-    private final Station firstStation;
-    private final Station secondStation;
+    private final String firstStation;
+    private final String secondStation;
     private final double distance;
     private final static ArrayList<Track> tracks = readTracksFromCSV();
 
-    public Track(Station firstStation, Station secondStation) {
+    public Track(String firstStation, String secondStation) {
         assert firstStation != null : "Please provide an actual first station";
         this.firstStation = firstStation;
         //assert !this.firstStation.isBlank() : "The first station is blank. Please provide an actual station";
@@ -19,7 +19,7 @@ public class Track {
         this.secondStation = secondStation;
         //assert !this.secondStation.isBlank() : "The second station is blank. Please provide an actual station";
         assert !this.secondStation.equals(this.firstStation);
-        this.distance = calculateDistance(firstStation, secondStation);
+        this.distance = 0;
     }
 
     public static ArrayList<Track> readTracksFromCSV() {
@@ -35,7 +35,7 @@ public class Track {
         scanner.nextLine();
 
         while (scanner.hasNext()) {
-            /*
+
             String rec = scanner.nextLine();
             String[] fields = rec.split(",");
             Track newTrack = new Track(
@@ -43,7 +43,6 @@ public class Track {
                     fields[1]);
             tracks.add(newTrack);
 
-             */
         }
 
         return tracks;
