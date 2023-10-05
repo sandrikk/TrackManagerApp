@@ -1,6 +1,5 @@
-package heap;
 
-import model.Station;
+package heap;
 
 import java.lang.reflect.Array;
 
@@ -80,37 +79,22 @@ public class MinHeap<T extends Comparable<T>> {
         }
     }
 
-    private void swap(int index, int parentIndex) {
-        T temp = items[index];
-        items[index] = items[parentIndex];
-        items[parentIndex] = temp;
+    private void swap(int a, int b) {
+        T temp = items[a];
+        items[a] = items[b];
+        items[b] = temp;
     }
 
     public int getSize() {
         return size;
     }
 
-
-    public static void main(String[] args) {
-        //MinHeap test = new MinHeap<>(5);
-        //MinHeap<Station> test = new MinHeap<>(Station.class, 5);
-        //test.getSize();
-
-        MinHeap<Integer> test = new MinHeap<>(Integer.class, 5);
-        test.push(5);
-        test.push(3);
-        test.push(7);
-        //test.push(1);
-        test.push(17);
-        test.push(18);
-        test.push(19);
-        test.push(13);
-
-        System.out.println("Min Element: " + test.peek()); // Output: 1
-
-        while (!test.isEmpty()) {
-            System.out.println("Popped: " + test.pop());
-        }
-
+    public int getCapacity() {
+        return items.length;
     }
+
 }
+
+
+
+
