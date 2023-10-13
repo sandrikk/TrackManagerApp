@@ -1,17 +1,19 @@
+package demo;
+
 import lists.DoublyLinkedList;
-import lists.HashTable;
 import lists.SortedList;
 import model.Station;
 import utils.CsvReader;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     static DoublyLinkedList<Station> stations = new DoublyLinkedList<>();
     static SortedList<Station> sortedStations = new SortedList<>();
-    static HashTable<String, Station> stationTable = new HashTable<>();
+    static HashMap<String, Station> stationTable = new HashMap<>();
     public static void main(String[] args) {
         // Call the method to read stations from CSV
         readStationsFromCSV();
@@ -34,15 +36,17 @@ public class Main {
                 case 1:
                     System.out.print("Insert name to search: ");
                     String nameToSearch = scanner.nextLine();
-
+/*
                     // linear
-                    Station foundStationByName = stations.search(station -> station.getName().equalsIgnoreCase(nameToSearch));
+                    Station foundStationByName = stations.linearSearch(station -> station.getName().equalsIgnoreCase(nameToSearch));
 
                     if (foundStationByName != null) {
                         System.out.println("Found station: " + foundStationByName);
                     } else {
                         System.out.println("Station not found.");
                     }
+
+ */
                     break;
 
                 case 2:

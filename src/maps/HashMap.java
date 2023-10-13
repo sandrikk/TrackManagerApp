@@ -1,10 +1,14 @@
-package lists;
+/*
+package maps;
 
-public class HashTable<K, V> {
+import lists.DoublyLinkedList;
+import lists.Node;
+
+public class HashMap<K, V> {
     private final DoublyLinkedList<Entry<K, V>>[] buckets;
     private int size;
 
-    public HashTable() {
+    public HashMap() {
         buckets = new DoublyLinkedList[10];
         size = 0;
     }
@@ -38,7 +42,7 @@ public class HashTable<K, V> {
 
         // Check if the key already exists in the bucket
         DoublyLinkedList<Entry<K, V>> bucket = buckets[index];
-        DoublyLinkedList<Entry<K, V>>.Node<Entry<K, V>> node = bucket.getHead();
+        Node<Entry<K, V>> node = bucket.getHead();
         while (node != null) {
             if (node.data.getKey().equals(key)) {
                 node.data.setValue(value);
@@ -60,7 +64,7 @@ public class HashTable<K, V> {
 
         // Search for the key in the bucket
         DoublyLinkedList<Entry<K, V>> bucket = buckets[index];
-        DoublyLinkedList<Entry<K, V>>.Node<Entry<K, V>> entry = bucket.getHead();
+        Node<Entry<K, V>> entry = bucket.getHead();
         while (entry != null) {
             if (entry.data.getKey().equals(key)) {
                 return entry.data.getValue();
@@ -80,4 +84,6 @@ public class HashTable<K, V> {
     }
 
 }
+
+ */
 

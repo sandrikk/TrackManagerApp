@@ -10,9 +10,11 @@ public class MatrixGraph<V> extends AbstractGraph<V> {
         this.connections = new boolean[vertices.length][vertices.length];
     }
 
+
     public boolean isDirected() {
         return directed;
     }
+
 
     public void connect(V vertex1, V vertex2) {
         int index1 = getIndex(vertex1);
@@ -22,4 +24,10 @@ public class MatrixGraph<V> extends AbstractGraph<V> {
             connections[index2][index1] = true;
         }
     }
+
+    private int getIndex(V vertex1) {
+        return 0;
+    }
+
+
 }

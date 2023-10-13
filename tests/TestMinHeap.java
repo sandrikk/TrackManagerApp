@@ -1,7 +1,6 @@
 import heap.MinHeap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import trees.BinarySearchTree;
 
 import static org.junit.Assert.*;
 

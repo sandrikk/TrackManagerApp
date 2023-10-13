@@ -1,7 +1,6 @@
 package graphs;
 
 import lists.DoublyLinkedList;
-import java.util.function.Predicate;
 
 public class AbstractGraph<V> {
     protected DoublyLinkedList<V> vertices;
@@ -17,10 +16,14 @@ public class AbstractGraph<V> {
         vertices.add(vertex);
     }
 
+    /*
+
     public void removeVertex(V vertex) {
         vertices.remove(vertex);
         // You may want to remove associated edges when removing a vertex.
     }
+
+     */
 
     public boolean containsVertex(V vertex) {
         return vertices.contains(vertex);
@@ -35,9 +38,5 @@ public class AbstractGraph<V> {
     }
 
     // You can add other methods for working with vertices and edges as needed.
-
-    public V search(Predicate<V> condition) {
-        return vertices.search(condition);
-    }
 }
 

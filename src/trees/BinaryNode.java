@@ -1,6 +1,6 @@
 package trees;
 
-class BinaryNode<T extends Comparable<T>> {
+public class BinaryNode<T extends Comparable<T>> {
     T data;
     BinaryNode<T> left, right, parent;
 
@@ -60,17 +60,9 @@ class BinaryNode<T extends Comparable<T>> {
     }
 
     public int getHeight() {
-        return  Math.max(left.getHeight(), right.getHeight());
-    }
-
-    /*
-
-    public int getHeight() {
         int leftHeight = (left != null) ? left.getHeight() : 0;
         int rightHeight = (right != null) ? right.getHeight() : 0;
         return 1 + Math.max(leftHeight, rightHeight);
     }
-    
-     */
 
 }

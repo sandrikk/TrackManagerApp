@@ -55,4 +55,6 @@ public class RecList<T> {
             return "{" + getData().toString() + ", " + rest.toString() + "}";
         }
     }
+
+
 }

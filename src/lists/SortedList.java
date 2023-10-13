@@ -1,7 +1,6 @@
 package lists;
 
 import java.util.Comparator;
-import java.util.function.Predicate;
 
 public class SortedList <T extends Comparable<T>> implements List<T> {
 
@@ -14,24 +13,6 @@ public class SortedList <T extends Comparable<T>> implements List<T> {
         while (current != null) {
             System.out.println(current.data);
             current = current.next;
-        }
-    }
-
-    class Node<E> {
-        Node<E> prev;
-        Node<E> next;
-        E data;
-
-        public Node(E data) {
-            this.data = data;
-        }
-
-        public void disconnect() {
-            if (next != null) {
-                next.prev = null;
-                next.disconnect();
-            }
-            next = null;
         }
     }
 
@@ -120,11 +101,6 @@ public class SortedList <T extends Comparable<T>> implements List<T> {
     }
 
     @Override
-    public T set(int index, T element) {
-        return null;
-    }
-
-    @Override
     public int size() {
         return 0;
     }
@@ -136,6 +112,15 @@ public class SortedList <T extends Comparable<T>> implements List<T> {
         return linkAtIndex.data;
     }
 
+    @Override
+    public boolean remove(T node) {
+        return false;
+    }
+
+    @Override
+    public boolean remove(int index) {
+        return false;
+    }
 
     public T binarySearch(Comparator<T> comparator, T key) {
         int left = 0;
