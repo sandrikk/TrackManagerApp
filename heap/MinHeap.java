@@ -8,17 +8,17 @@ public class MinHeap<T extends Comparable<T>> {
     private int size;
     //private Comperator<T> comperator;
 
-    public MinHeap(Class<T > clazz, int initialSize) {
+    public MinHeap(Class<T> clazz, int initialSize) {
         //this.items = (T[])new Object[initialSize];
         // no contains bc we dont need it
-        this.items = (T[])Array.newInstance(clazz, initialSize);
+        this.items = (T[]) Array.newInstance(clazz, initialSize);
     }
 
-    public  T peek() {
+    public T peek() {
         if (isEmpty()) {
             return null;
         }
-        return  items[0];
+        return items[0];
     }
 
     public boolean isEmpty() {
@@ -29,7 +29,7 @@ public class MinHeap<T extends Comparable<T>> {
         if (size == items.length) {
             remap();
         }
-        items[size]=data;
+        items[size] = data;
         percolateUp(size);
         size++;
     }
@@ -93,6 +93,34 @@ public class MinHeap<T extends Comparable<T>> {
         return items.length;
     }
 
+    public String toWebGraph() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("diGraph MinHeap {\n");
+
+        for (int i = 0; i < size; i++) {
+            int left = 2 * i + 1;
+            int right = 2 * i + 2;
+
+            // If left child exists, add a connection to it
+            if (left < size) {
+                sb.append("    ").append(items[i]).append(" -> ").append(items[left]).append(";\n");
+            }
+
+            // If right child exists, add a connection to it
+            if (right < size) {
+                sb.append("    ").append(items[i]).append(" -> ").append(items[right]).append(";\n");
+            }
+        }
+
+        sb.append("}\n");
+        return sb.toString();
+    }
+
+    public void buildHeap() {
+        for (int i = size / 2 - 1; i >= 0; i--) {
+            percolateDown(i);
+        }
+    }
 }
 
 
