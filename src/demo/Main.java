@@ -4,6 +4,7 @@ import lists.DoublyLinkedList;
 import lists.SortedList;
 import model.Station;
 import utils.CsvReader;
+import utils.ListUtils;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -36,9 +37,9 @@ public class Main {
                 case 1:
                     System.out.print("Insert name to search: ");
                     String nameToSearch = scanner.nextLine();
-/*
+
                     // linear
-                    Station foundStationByName = stations.linearSearch(station -> station.getName().equalsIgnoreCase(nameToSearch));
+                    Station foundStationByName = ListUtils.linearSearch(stations.getHead(), station -> station.getName().equalsIgnoreCase(nameToSearch));
 
                     if (foundStationByName != null) {
                         System.out.println("Found station: " + foundStationByName);
@@ -46,7 +47,6 @@ public class Main {
                         System.out.println("Station not found.");
                     }
 
- */
                     break;
 
                 case 2:
