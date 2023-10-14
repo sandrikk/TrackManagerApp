@@ -2,12 +2,12 @@ package demo;
 
 import lists.DoublyLinkedList;
 import lists.SortedList;
+import maps.HashMap;
 import model.Station;
 import utils.CsvReader;
 import utils.ListUtils;
 
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 

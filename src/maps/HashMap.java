@@ -1,4 +1,3 @@
-/*
 package maps;
 
 import lists.DoublyLinkedList;
@@ -13,27 +12,6 @@ public class HashMap<K, V> {
         size = 0;
     }
 
-    private static class Entry<K, V> {
-        private final K key;
-        private final V value;
-
-        public Entry(K key, V value) {
-            this.key = key;
-            this.value = value;
-        }
-
-        public K getKey() {
-            return key;
-        }
-
-        public V getValue() {
-            return value;
-        }
-
-        public void setValue(V value) {
-        }
-    }
-
     public void put(K key, V value) {
         int index = hash(key);
         if (buckets[index] == null) {
@@ -44,11 +22,11 @@ public class HashMap<K, V> {
         DoublyLinkedList<Entry<K, V>> bucket = buckets[index];
         Node<Entry<K, V>> node = bucket.getHead();
         while (node != null) {
-            if (node.data.getKey().equals(key)) {
-                node.data.setValue(value);
+            if (node.getData().getKey().equals(key)) {
+                node.getData().setValue(value);
                 return;
             }
-            node = node.next;
+            node = node.getNext();
         }
 
         // Key not found, add a new entry to the bucket
@@ -66,24 +44,19 @@ public class HashMap<K, V> {
         DoublyLinkedList<Entry<K, V>> bucket = buckets[index];
         Node<Entry<K, V>> entry = bucket.getHead();
         while (entry != null) {
-            if (entry.data.getKey().equals(key)) {
-                return entry.data.getValue();
+            if (entry.getData().getKey().equals(key)) {
+                return entry.getData().getValue();
             }
-            entry = entry.next;
+            entry = entry.getNext();
         }
 
         // Key not found in the bucket
         return null;
     }
 
-
     private int hash(K key) {
         // Implement your hash function here
         // You can use the key's hash code or create a custom hash function
         return Math.abs(key.hashCode() % buckets.length);
     }
-
 }
-
- */
-
