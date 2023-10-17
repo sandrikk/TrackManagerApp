@@ -13,6 +13,8 @@ public class HashMap<K, V> {
     }
 
     public void put(K key, V value) {
+        if (value == null)
+            throw new NullPointerException();
         int index = hash(key);
         if (buckets[index] == null) {
             buckets[index] = new DoublyLinkedList<>();
@@ -37,7 +39,7 @@ public class HashMap<K, V> {
     public V get(K key) {
         int index = hash(key);
         if (buckets[index] == null) {
-            return null;
+            throw new NullPointerException();
         }
 
         // Search for the key in the bucket
@@ -51,12 +53,20 @@ public class HashMap<K, V> {
         }
 
         // Key not found in the bucket
-        return null;
+        throw new NullPointerException();
     }
 
     private int hash(K key) {
         // Implement your hash function here
         // You can use the key's hash code or create a custom hash function
         return Math.abs(key.hashCode() % buckets.length);
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
     }
 }

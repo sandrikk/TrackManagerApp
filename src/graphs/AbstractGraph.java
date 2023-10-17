@@ -1,42 +1,35 @@
 package graphs;
 
-import lists.DoublyLinkedList;
 
 public class AbstractGraph<V> {
-    protected DoublyLinkedList<V> vertices;
+    protected V[] vertices;
 
+    @SafeVarargs
     public AbstractGraph(V... vertices) {
-        this.vertices = new DoublyLinkedList<>();
-        for (V vertex : vertices) {
-            addVertex(vertex);
-        }
+        this.vertices = vertices;
     }
 
-    public void addVertex(V vertex) {
-        vertices.add(vertex);
-    }
 
-    /*
-
-    public void removeVertex(V vertex) {
-        vertices.remove(vertex);
-        // You may want to remove associated edges when removing a vertex.
-    }
-
-     */
-
-    public boolean containsVertex(V vertex) {
-        return vertices.contains(vertex);
-    }
-
-    public DoublyLinkedList<V> getVertices() {
+    protected V[] getVertices() {
         return vertices;
     }
 
-    public int getVertexCount() {
-        return vertices.size();
+    protected int getSize() {
+        return vertices.length;
     }
 
-    // You can add other methods for working with vertices and edges as needed.
+    protected int getIndex(V vertex) {
+        for (int i = 0; i < vertices.length; i++) {
+            if (vertices[i].equals(vertex)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    protected boolean isEmpty() {
+        return vertices.length == 0;
+    }
+
 }
 

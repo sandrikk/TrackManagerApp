@@ -14,7 +14,7 @@ import java.util.Scanner;
 public class Main {
     static DoublyLinkedList<Station> stations = new DoublyLinkedList<>();
     static SortedList<Station> sortedStations = new SortedList<>();
-    static HashMap<String, Station> stationTable = new HashMap<>();
+    static HashMap<String, Station> stationHashMap = new HashMap<>();
     public static void main(String[] args) {
         // Call the method to read stations from CSV
         readStationsFromCSV();
@@ -53,7 +53,7 @@ public class Main {
                     System.out.print("Insert stations code: ");
                     String inputCode = scanner.nextLine();
                     System.out.println(inputCode);
-                    Station foundStationByCode = stationTable.get(inputCode); // Retrieve foundStationByCode from the table
+                    Station foundStationByCode = stationHashMap.get(inputCode); // Retrieve foundStationByCode from the table
                     if (foundStationByCode != null) {
                         // Station found
                         System.out.println(foundStationByCode);
@@ -124,7 +124,7 @@ public class Main {
             Station newStation = new Station(id, code, uic, name, slug, country, type, geoLat, geoLng);
             stations.add(newStation);
             sortedStations.add(newStation);
-            stationTable.put(newStation.getCode() ,newStation);
+            stationHashMap.put(newStation.getCode() ,newStation);
         }
 
         sortedStations.print();
