@@ -93,7 +93,7 @@ public class MinHeap<T extends Comparable<T>> {
         return items.length;
     }
 
-    public String toWebGraph() {
+    public String graphViz() {
         StringBuilder sb = new StringBuilder();
         sb.append("diGraph MinHeap {\n");
 

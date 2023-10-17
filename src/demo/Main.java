@@ -1,5 +1,6 @@
 package demo;
 
+import heap.MinHeap;
 import lists.DoublyLinkedList;
 import lists.SortedList;
 import maps.HashMap;
@@ -88,7 +89,14 @@ public class Main {
 
 
                 case 4:
-                    // Implement the list functionality here
+                    MinHeap<Integer> minHeap = new MinHeap<>(Integer.class, 10);
+                    minHeap.push(1);
+                    minHeap.push(2);
+                    minHeap.push(3);
+                    minHeap.push(12);
+                    minHeap.push(98);
+                    minHeap.push(37);
+                    System.out.println(minHeap.graphViz());
                     break;
 
                 case 5:

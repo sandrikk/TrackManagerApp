@@ -97,6 +97,28 @@ public class BinarySearchTree<T extends Comparable<T>> {
         return node;
     }
 
+    public String toGraphVizBST() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("diGraph BinarySearchTree {\n");
+        toGraphVizBST(root, sb);
+        sb.append("}\n");
+        return sb.toString();
+    }
+
+    private void toGraphVizBST(BinaryNode<T> node, StringBuilder sb) {
+        if (node != null) {
+            if (node.getLeft() != null) {
+                sb.append("    ").append(node.getData()).append(" -> ").append(node.getLeft().getData()).append(";\n");
+            }
+            if (node.getRight() != null) {
+                sb.append("    ").append(node.getData()).append(" -> ").append(node.getRight().getData()).append(";\n");
+            }
+            toGraphVizBST(node.getLeft(), sb);
+            toGraphVizBST(node.getRight(), sb);
+        }
+    }
+
+
 
 }
 

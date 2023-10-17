@@ -26,7 +26,7 @@ public class BinaryNode<T extends Comparable<T>> {
     }
 
     public boolean isLeaf() {
-        return right == null & left == null;
+        return right == null && left == null;
     }
 
     public boolean isParent() {
