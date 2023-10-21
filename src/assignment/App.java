@@ -1,4 +1,4 @@
-package demo;
+package assignment;
 
 import heap.MinHeap;
 import lists.DoublyLinkedList;
@@ -8,12 +8,15 @@ import model.Station;
 import utils.CsvReader;
 import utils.ListUtils;
 
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
-public class Main {
+public class App {
     static DoublyLinkedList<Station> stations = new DoublyLinkedList<>();
+    static ArrayList<Station> stationsArrayList = new ArrayList<>();
     static SortedList<Station> sortedStations = new SortedList<>();
     static HashMap<String, Station> stationHashMap = new HashMap<>();
     public static void main(String[] args) {
@@ -133,8 +136,27 @@ public class Main {
             stations.add(newStation);
             sortedStations.add(newStation);
             stationHashMap.put(newStation.getCode() ,newStation);
+            stationsArrayList.add(newStation);
+
         }
 
         sortedStations.print();
+    }
+
+    public void draw() {
+        for (Station station : stationsArrayList) {
+            double longitude = station.getGeoLng();
+            double latitude = station.getGeoLat();
+
+            // Draw a circle on the canvas using longitude and latitude
+            drawCircleOnCanvas(longitude, latitude);
+        }
+    }
+
+    private void drawCircleOnCanvas(double longitude, double latitude) {
+        Canvas canvas =
+
+
+         canvas.drawCircle(longitude, latitude, radius, paint);
     }
 }

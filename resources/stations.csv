@@ -200,7 +200,7 @@ id,code,uic,name_short,name_medium,name_long,slug,country,type,geo_lat,geo_lng
 786,FWD,8400638,Feanwâlden,Feanwâlden,Feanwâlden,feanwalden,NL,stoptreinstation,53.2351834,5.9886615
 187,FN,8400232,Franeker,Franeker,Franeker,franeker,NL,stoptreinstation,53.1824488,5.5483094
 186,FFFM,8011068,Frankfurt,"Frankfurt Hbf","Frankfurt (M) Hbf",frankfurt-m-hbf,D,knooppuntIntercitystation,50.1071222,8.6638338
-828,FFS,8011065,Frankf.Süd,"Frankfurt (M)Süd","Frankfurt (demo.Main) Süd",frankfurt-main-sud,D,intercitystation,50.099444,8.686389
+828,FFS,8011065,Frankf.Süd,"Frankfurt (M)Süd","Frankfurt (assignment.Main) Süd",frankfurt-main-sud,D,intercitystation,50.099444,8.686389
 189,FNAF,8061676,FrankfurtF,"Frankfurt Flugh.","Frankfurt Flughafen Fernb",frankfurt-flughafen-fernb,D,knooppuntIntercitystation,50.053171029929,8.570237159729
 593,RF,8014350,Freiburg,"Freiburg (B.)","Freiburg (Breisgau) Hbf",freiburg-breisgau-hbf,D,sneltreinstation,47.99789,7.84134
 199,GDR,8400241,Gaanderen,Gaanderen,Gaanderen,gaanderen,NL,stoptreinstation,51.93074,6.3486

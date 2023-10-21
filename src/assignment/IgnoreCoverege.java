@@ -1,4 +1,4 @@
-package demo;
+package assignment;
 
 public interface IgnoreCoverege {
 }
