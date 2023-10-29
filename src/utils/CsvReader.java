@@ -13,7 +13,7 @@ public class CsvReader {
     private final Pattern pattern; // Add a Pattern field
     private final String idRegex = "[0-9]+";
     private final String codeRegex = "[A-Z]+";
-    private int counter;
+    private int counter = 1; // headings
 
     public CsvReader(String filePath, String regex) {
         this.filePath = filePath;
@@ -26,9 +26,11 @@ public class CsvReader {
         try (Scanner scanner = new Scanner(new File(filePath))) {
             String headings = scanner.nextLine();
 
-            while (scanner.hasNextLine()) {
 
+            while (scanner.hasNextLine()) {
+                counter++;
                 String line = scanner.nextLine();
+
 
                 // Remove double quotes from the entire line
                 line = line.replace("\"", "");
@@ -39,9 +41,9 @@ public class CsvReader {
                     String[] fields = line.split(",");
                     data.add(fields);
                 } else {
-                    throw new IllegalArgumentException(line + " not good on line " + counter);
+                    throw new IllegalArgumentException("Invalid data on line " + counter + ": " + line);
                 }
-                counter++;
+
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

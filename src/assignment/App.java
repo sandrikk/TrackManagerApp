@@ -5,23 +5,25 @@ import lists.DoublyLinkedList;
 import lists.SortedList;
 import maps.HashMap;
 import model.Station;
+import model.Track;
 import utils.CsvReader;
 import utils.ListUtils;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
 public class App {
-    static DoublyLinkedList<Station> stations = new DoublyLinkedList<>();
+    static DoublyLinkedList<Station> stationsDoubly = new DoublyLinkedList<>();
     static ArrayList<Station> stationsArrayList = new ArrayList<>();
+    static ArrayList<Track> tracksArrayList = new ArrayList<>();
     static SortedList<Station> sortedStations = new SortedList<>();
     static HashMap<String, Station> stationHashMap = new HashMap<>();
     public static void main(String[] args) {
         // Call the method to read stations from CSV
-        readStationsFromCSV();
+        //readStationsFromCSV();
+        readTracksFromCSV();
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
@@ -43,7 +45,7 @@ public class App {
                     String nameToSearch = scanner.nextLine();
 
                     // linear
-                    Station foundStationByName = ListUtils.linearSearch(stations.getHead(), station -> station.getName().equalsIgnoreCase(nameToSearch));
+                    Station foundStationByName = ListUtils.linearSearch(stationsDoubly.getHead(), station -> station.getName().equalsIgnoreCase(nameToSearch));
 
                     if (foundStationByName != null) {
                         System.out.println("Found station: " + foundStationByName);
@@ -115,7 +117,7 @@ public class App {
         }
     }
 
-    // Move the CSV reading logic here
+
     public static void readStationsFromCSV() {
         CsvReader csvReader = new CsvReader("./resources/stations.csv", "");
 
@@ -133,30 +135,30 @@ public class App {
             double geoLng = Double.parseDouble(fields[10]);
 
             Station newStation = new Station(id, code, uic, name, slug, country, type, geoLat, geoLng);
-            stations.add(newStation);
+            stationsDoubly.add(newStation);
             sortedStations.add(newStation);
             stationHashMap.put(newStation.getCode() ,newStation);
             stationsArrayList.add(newStation);
 
         }
-
-        sortedStations.print();
     }
 
-    public void draw() {
-        for (Station station : stationsArrayList) {
-            double longitude = station.getGeoLng();
-            double latitude = station.getGeoLat();
+    public static void readTracksFromCSV() {
+        CsvReader csvReader = new CsvReader("./resources/tracks.csv", "^[a-z]+,[a-z]+,\\d+,\\d+,\\d+$");
 
-            // Draw a circle on the canvas using longitude and latitude
-            drawCircleOnCanvas(longitude, latitude);
+        List<String[]> csvData = csvReader.readCsv();
+
+        for (String[] fields : csvData) {
+            String firstStation = fields[1];
+            String secondStation = fields[2];
+            int distance = Integer.parseInt(fields[3]);
+            Track newTrack = new Track(firstStation, secondStation, distance);
+
+            tracksArrayList.add(newTrack);
         }
-    }
 
-    private void drawCircleOnCanvas(double longitude, double latitude) {
-        Canvas canvas =
-
-
-         canvas.drawCircle(longitude, latitude, radius, paint);
+        for (Track t: tracksArrayList) {
+            System.out.println(t);
+        }
     }
 }
