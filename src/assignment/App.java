@@ -6,6 +6,7 @@ import lists.SortedList;
 import maps.HashMap;
 import model.Station;
 import model.Track;
+import utils.Astar;
 import utils.CsvReader;
 import utils.ListUtils;
 
@@ -22,7 +23,7 @@ public class App {
     static HashMap<String, Station> stationHashMap = new HashMap<>();
     public static void main(String[] args) {
         // Call the method to read stations from CSV
-        //readStationsFromCSV();
+        readStationsFromCSV();
         readTracksFromCSV();
         Scanner scanner = new Scanner(System.in);
 
@@ -31,8 +32,8 @@ public class App {
             System.out.println("1. Search for a station by name (linear search)");
             System.out.println("2. Search for a station by code (hash table)");
             System.out.println("3. Search for a station by name (binary search)");
-            System.out.println("4.");
-            System.out.println("5. Exit");
+            System.out.println("5. A* algorithm");
+            System.out.println("6. Exit");
 
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
@@ -105,6 +106,17 @@ public class App {
                     break;
 
                 case 5:
+                    System.out.print("Enter the code of the first station: ");
+                    String startStationCode = scanner.nextLine().toLowerCase();
+                    System.out.print("Enter the code of the second station: ");
+                    String goalStationCode = scanner.nextLine().toLowerCase();
+
+                    // Implement A* algorithm to find the shortest path
+                    List<String> shortestPath = astarPath(startStationCode, goalStationCode);
+                    System.out.println("Shortest path: " + shortestPath);
+                    break;
+
+                case 6:
                     System.out.println("Exiting the program.");
                     scanner.close();
                     System.exit(0);
@@ -119,7 +131,10 @@ public class App {
 
 
     public static void readStationsFromCSV() {
+        //CsvReader csvReader = new CsvReader("./resources/stations.csv", "^(\\\\d+),([A-Z]+),(\\\\d+),\\\"([^\\\"]+)\\\",\\\"([^\\\"]+)?\\\",\\\"([^\\\"]+)?\\\",\\\"([^\\\"]+)?\\\",([A-Z]+),([a-zA-Z0-9\\\\-]+),([A-Z]+),([0-9.]+),([0-9.]+)$");
+        //CsvReader csvReader = new CsvReader("./resources/stations.csv", "[0-9]+,[A-Za-z]+,[0-9]+,"[^"]*",'[^']*'s-[A-Za-z]+,[A-Za-z]+-[A-Za-z]+,[A-Za-z]+,[A-Za-z]+,[0-9]*\.[0-9]+,[0-9]*\.[0-9]+");
         CsvReader csvReader = new CsvReader("./resources/stations.csv", "");
+
 
         List<String[]> csvData = csvReader.readCsv();
 
@@ -157,8 +172,32 @@ public class App {
             tracksArrayList.add(newTrack);
         }
 
-        for (Track t: tracksArrayList) {
-            System.out.println(t);
+    }
+    public static List<String> astarPath(String startStationCode, String goalStationCode) {
+        // Print the content of stationHashMap for debugging
+        System.out.println("stationHashMap: " + stationHashMap);
+
+        // Find the corresponding stations for the provided station codes
+        Station startStation = stationHashMap.get(startStationCode);
+        Station goalStation = stationHashMap.get(goalStationCode);
+
+        // Print the station codes for debugging
+        System.out.println("startStationCode: " + startStationCode);
+        System.out.println("goalStationCode: " + goalStationCode);
+
+        if (startStation != null && goalStation != null) {
+            // Create an utils.Astar instance
+            Astar astar = new Astar();
+            astar.printMapContents();
+
+            // Find the shortest path using A* algorithm
+            List<String> shortestPath = astar.astar(startStation.getCode(), goalStation.getCode());
+
+            return shortestPath;
+        } else {
+            return null; // Invalid station codes provided
         }
     }
+
+
 }

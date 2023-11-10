@@ -16,6 +16,17 @@ public class Track {
         this.distance = distance;
     }
 
+    public String getFirstStation() {
+        return firstStation;
+    }
+
+    public String getSecondStation() {
+        return secondStation;
+    }
+
+    public int getDistance() {
+        return distance;
+    }
 
     @Override
     public String toString() {

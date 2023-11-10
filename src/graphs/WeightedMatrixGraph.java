@@ -1,5 +1,8 @@
 package graphs;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class WeightedMatrixGraph<V> extends AbstractGraph<V> {
     private final boolean directed;
     private final boolean[][] connections;
@@ -33,5 +36,22 @@ public class WeightedMatrixGraph<V> extends AbstractGraph<V> {
         int index2 = getIndex(vertex2);
         return weights[index1][index2];
     }
+
+    public List<V> getNeighbors(V vertex) {
+        List<V> neighbors = new ArrayList<>();
+        int index = getIndex(vertex);
+        if (index < 0 || index >= vertices.length) {
+            return neighbors; // Vertex not found
+        }
+
+        for (int i = 0; i < vertices.length; i++) {
+            if (connections[index][i]) {
+                neighbors.add(vertices[i]);
+            }
+        }
+
+        return neighbors;
+    }
+
 
 }

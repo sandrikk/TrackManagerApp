@@ -1,6 +1,6 @@
 package model;
 
-public class Station implements Comparable<Station>{
+public class Station implements Comparable<Station> {
     private final int id, uic;
     private final String code, slug, country, type;
     private final String name;
@@ -52,17 +52,7 @@ public class Station implements Comparable<Station>{
 
     @Override
     public String toString() {
-        return "Station{" +
-                "id=" + id +
-                ", code='" + code + '\'' +
-                ", uic=" + uic +
-                ", name='" + name + '\'' +
-                ", slug='" + slug + '\'' +
-                ", country='" + country + '\'' +
-                ", type='" + type + '\'' +
-                ", geoLat=" + geoLat +
-                ", geoLng=" + geoLng +
-                '}';
+        return "Station " + name + " with code " + code + " (" + geoLat + ", " + geoLng + ")";
     }
 
 }
