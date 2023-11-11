@@ -22,7 +22,7 @@ public class Sort {
     }
 
     // Helper method to merge two sorted lists
-    private <T> void merge(List<T> list, List<T> left, List<T> right, Comparator<T> comparator) {
+    public <T> void merge(List<T> list, List<T> left, List<T> right, Comparator<T> comparator) {
         int leftIndex = 0;
         int rightIndex = 0;
         int index = 0;
@@ -62,4 +62,6 @@ public class Sort {
             }
         }
     }
+
+
 }
