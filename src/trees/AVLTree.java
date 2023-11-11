@@ -2,13 +2,9 @@ package trees;
 
 public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 
-    // Additional methods specific to AVL Tree can be added here
-
     @Override
     public void add(T data) {
-        // Implement AVL-specific insertion logic
-        super.add(data); // Call the add method from the parent class
-        // Perform AVL balancing operations
+        super.add(data);
     }
 
     private BinaryNode<T> rotateRight(BinaryNode<T> node) {
@@ -50,13 +46,17 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
     }
 
     //Get the balance factor of a node (height of left subtree - height of right subtree)
-    private int getBalanceFactor(BinaryNode<T> node) {
+    public int getBalanceFactor(BinaryNode<T> node) {
         if (node == null) {
             return 0;
         }
         int leftHeight = (node.left != null) ? node.left.getHeight() : -1;
         int rightHeight = (node.right != null) ? node.right.getHeight() : -1;
         return leftHeight - rightHeight;
+    }
+
+    public BinaryNode<T> getRoot() {
+        return root; // assuming 'root' is the name of the root node in AVLTree
     }
 
     public String toGraphVizAVLTree() {
@@ -79,8 +79,5 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
             toGraphVizAVLTree(node.getRight(), sb);
         }
     }
-
-
-
 
 }

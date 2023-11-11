@@ -7,6 +7,7 @@ import lists.SortedList;
 import maps.MyHashMap;
 import model.Station;
 import model.Track;
+import sort.Sort;
 import utils.CsvReader;
 import utils.GraphUtils;
 import utils.ListUtils;
@@ -47,9 +48,11 @@ public class App {
             System.out.println("1. Search for a station by name (linear search)");
             System.out.println("2. Search for a station by code (hash table)");
             System.out.println("3. Search for a station by name (binary search)");
-            System.out.println("5. A* algorithm");
-            System.out.println("6. Dijkstra algorithm");
-            System.out.println("7. Exit");
+            System.out.println("4. Sort an ArrayList of connections by length (mergesort");
+            System.out.println("5. Sort an ArrayList of connections by length (selectionsort");
+            System.out.println("6. A* algorithm");
+            System.out.println("7. Dijkstra algorithm");
+            System.out.println("8. Exit");
 
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
@@ -111,17 +114,42 @@ public class App {
 
 
                 case 4:
-                    MinHeap<Integer> minHeap = new MinHeap<>(Integer.class, 10);
-                    minHeap.push(1);
-                    minHeap.push(2);
-                    minHeap.push(3);
-                    minHeap.push(12);
-                    minHeap.push(98);
-                    minHeap.push(37);
-                    System.out.println(minHeap.graphViz());
-                    break;
+                    System.out.println("Sorting tracks by length using merge sort...");
 
+                    // Define a comparator for Track objects based on their distance
+                    Comparator<Track> trackComparator = Comparator.comparingInt(Track::getDistance);
+
+                    // Create an instance of your Sort class
+                    Sort sort = new Sort();
+
+                    // Perform merge sort on tracksArrayList using the defined comparator
+                    sort.mergeSort(tracksArrayList, trackComparator);
+
+                    // Optionally, print the sorted list to verify
+                    for (Track track : tracksArrayList) {
+                        System.out.println(track);
+                    }
+
+                    break;
                 case 5:
+                    System.out.println("Sorting tracks by length using selection sort...");
+
+                    // Define a comparator for Track objects based on their distance
+                    Comparator<Track> trackDistanceComparator = Comparator.comparingInt(Track::getDistance);
+
+                    // Create an instance of the Sort class
+                    Sort sortInstance = new Sort();
+
+                    // Perform selection sort on tracksArrayList using the defined comparator
+                    sortInstance.selectionSort(tracksArrayList, trackDistanceComparator);
+
+                    // Optionally, print the sorted list to verify
+                    for (Track track : tracksArrayList) {
+                        System.out.println(track);
+                    }
+
+                    break;
+                case 6:
                     System.out.print("Enter the code of the first station: ");
                     String startStationCode = scanner.nextLine().toLowerCase();
                     System.out.print("Enter the code of the second station: ");
@@ -140,7 +168,7 @@ public class App {
                     }
                     break;
 
-                case 6:
+                case 7:
                     System.out.print("Enter the code of the first station: ");
                     String startStationCodeDijkstra = scanner.nextLine().toLowerCase();
                     System.out.print("Enter the code of the second station: ");
@@ -158,7 +186,7 @@ public class App {
                         System.out.println("One or both of the station codes are invalid.");
                     }
                     break;
-                case 7:
+                case 8:
                     System.out.println("Exiting the program.");
                     scanner.close();
                     System.exit(0);
@@ -232,7 +260,18 @@ public class App {
 
             }
 
+     /*
+                    MinHeap<Integer> minHeap = new MinHeap<>(Integer.class, 10);
+                    minHeap.push(1);
+                    minHeap.push(2);
+                    minHeap.push(3);
+                    minHeap.push(12);
+                    minHeap.push(98);
+                    minHeap.push(37);
+                    System.out.println(minHeap.graphViz());
+                    break;
 
+                     */
 
         }
 
