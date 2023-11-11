@@ -1,6 +1,7 @@
 package graphs;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class WeightedMatrixGraph<V> extends AbstractGraph<V> {
@@ -59,6 +60,10 @@ public class WeightedMatrixGraph<V> extends AbstractGraph<V> {
         }
 
         return neighbors;
+    }
+
+    public List<V> getAllVertices() {
+        return Arrays.asList(vertices);
     }
 
     public String toGraphViz() {

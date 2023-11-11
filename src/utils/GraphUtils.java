@@ -7,51 +7,42 @@ import java.util.*;
 
 public class GraphUtils {
     public static List<String> findShortestPathAStar(WeightedMatrixGraph<String> graph, String startStationCode, String goalStationCode, Map<String, Station> stationMap) {
-        // Set of nodes already evaluated
         Set<String> closedSet = new HashSet<>();
 
-        // The set of currently discovered nodes that are not evaluated yet.
-        // Initially, only the start node is known.
-        PriorityQueue<Node> openSet = new PriorityQueue<>(Comparator.comparingDouble(Node::getFscore));
-        openSet.add(new Node(startStationCode, heuristic(startStationCode, goalStationCode, stationMap), 0));
+        PriorityQueue<AStarNode> openSet = new PriorityQueue<>(Comparator.comparingDouble(AStarNode::fscore));
+        openSet.add(new AStarNode(startStationCode, heuristic(startStationCode, goalStationCode, stationMap), 0));
 
-        // For each node, which node it can most efficiently be reached from.
-        // If a node can be reached from many nodes, cameFrom will eventually contain the
-        // most efficient previous step.
         Map<String, String> cameFrom = new HashMap<>();
 
-        // For each node, the cost of getting from the start node to that node.
         Map<String, Double> gScore = new HashMap<>(); // Default value is Infinity
         gScore.put(startStationCode, 0.0);
 
-        // For each node, the total cost of getting from the start node to the goal
-        // by passing by that node. That value is partly known, partly heuristic.
         Map<String, Double> fScore = new HashMap<>(); // Default value is Infinity
         fScore.put(startStationCode, heuristic(startStationCode, goalStationCode, stationMap));
 
         while (!openSet.isEmpty()) {
-            Node current = openSet.poll();
+            AStarNode current = openSet.poll();
 
-            if (current.getCode().equals(goalStationCode)) {
-                return reconstructPath(cameFrom, goalStationCode);
+            if (current.code().equals(goalStationCode)) {
+                return reconstructPathAStar(cameFrom, goalStationCode);
             }
 
-            closedSet.add(current.getCode());
+            closedSet.add(current.code());
 
-            for (String neighbor : graph.getNeighbors(current.getCode())) {
+            for (String neighbor : graph.getNeighbors(current.code())) {
                 if (closedSet.contains(neighbor)) {
                     continue;
                 }
 
-                double tentativeGScore = gScore.getOrDefault(current.getCode(), Double.MAX_VALUE) + graph.getWeight(current.getCode(), neighbor);
+                double tentativeGScore = gScore.getOrDefault(current.code(), Double.MAX_VALUE) + graph.getWeight(current.code(), neighbor);
 
                 if (tentativeGScore < gScore.getOrDefault(neighbor, Double.MAX_VALUE)) {
                     // This path to neighbor is better than any previous one. Record it!
-                    cameFrom.put(neighbor, current.getCode());
+                    cameFrom.put(neighbor, current.code());
                     gScore.put(neighbor, tentativeGScore);
                     fScore.put(neighbor, tentativeGScore + heuristic(neighbor, goalStationCode, stationMap));
 
-                    Node neighborNode = new Node(neighbor, fScore.get(neighbor), tentativeGScore);
+                    AStarNode neighborNode = new AStarNode(neighbor, fScore.get(neighbor), tentativeGScore);
 
                     // Remove the node if it's already in the open set with a worse score
                     openSet.remove(neighborNode);
@@ -61,6 +52,49 @@ public class GraphUtils {
             }
         }
 
+        return Collections.emptyList();
+    }
+
+    public static List<String> findShortestPathDijkstra(WeightedMatrixGraph<String> graph, String startStationCode, String goalStationCode) {
+        Map<String, Double> distances = new HashMap<>();
+
+        Map<String, String> previous = new HashMap<>();
+
+        PriorityQueue<DijkstraNode> queue = new PriorityQueue<>(Comparator.comparingDouble(DijkstraNode::distance));
+
+        for (String vertex : graph.getAllVertices()) {
+            distances.put(vertex, Double.POSITIVE_INFINITY);
+            previous.put(vertex, null);
+        }
+
+        // Set the distance for the start station to 0 and add it to the queue
+        distances.put(startStationCode, 0.0);
+        queue.add(new DijkstraNode(startStationCode, 0.0));
+
+        while (!queue.isEmpty()) {
+            DijkstraNode current = queue.poll();
+            String currentStationCode = current.code();
+
+            // If the goal station is reached, use the previous map to backtrack the path
+            if (currentStationCode.equals(goalStationCode)) {
+                return reconstructPathDijkstra(previous, goalStationCode);
+            }
+
+            // Explore the neighbors of the current station
+            for (String neighbor : graph.getNeighbors(currentStationCode)) {
+                // Calculate what the new distance would be if we went to neighbor via current
+                double alternateDist = distances.get(currentStationCode) + graph.getWeight(currentStationCode, neighbor);
+
+                // If the new distance is shorter, update distances and previous, and add the neighbor to the queue
+                if (alternateDist < distances.get(neighbor)) {
+                    distances.put(neighbor, alternateDist);
+                    previous.put(neighbor, currentStationCode);
+                    queue.add(new DijkstraNode(neighbor, alternateDist));
+                }
+            }
+        }
+
+        // If the goal station is not reachable from the start station, return an empty list
         return Collections.emptyList();
     }
 
@@ -85,7 +119,7 @@ public class GraphUtils {
         return c * r;
     }
 
-    private static List<String> reconstructPath(Map<String, String> cameFrom, String current) {
+    private static List<String> reconstructPathAStar(Map<String, String> cameFrom, String current) {
         LinkedList<String> totalPath = new LinkedList<>();
         totalPath.add(current);
         while (cameFrom.containsKey(current)) {
@@ -95,33 +129,25 @@ public class GraphUtils {
         return totalPath;
     }
 
-    // Helper class to represent a node in the graph
-    private static class Node {
-        private final String code;
-        private double fscore; // The cost of getting from the start node to this node
-        private double gScore; // The cost from this node to the goal, estimated by the heuristic
-
-        // Constructor
-        public Node(String code, double fscore, double gScore) {
-            this.code = code;
-            this.fscore = fscore;
-            this.gScore = gScore;
+    private static List<String> reconstructPathDijkstra(Map<String, String> previous, String current) {
+        List<String> path = new ArrayList<>();
+        while (current != null) { // Traverse the path backwards from goal to start
+            path.add(0, current); // Add each station to the front of the list
+            current = previous.get(current); // Move to the previous station on the path
         }
+        return path; // Return the reconstructed path
+    }
 
-        public String getCode() {
-            return code;
-        }
 
-        public double getFscore() {
-            return fscore;
-        }
+    private record AStarNode(String code, double fscore, double gScore) {
+    // Constructor
 
-        // Override equals and hashCode based on Node code
+    // Override equals and hashCode based on Node code
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            Node node = (Node) o;
+            AStarNode node = (AStarNode) o;
             return Objects.equals(code, node.code);
         }
 
@@ -130,4 +156,20 @@ public class GraphUtils {
             return Objects.hash(code);
         }
     }
+
+    private record DijkstraNode(String code, double distance) {
+
+        @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (!(o instanceof DijkstraNode that)) return false;
+                return code.equals(that.code);
+            }
+
+            @Override
+            public int hashCode() {
+                return code.hashCode();
+            }
+        }
+
 }

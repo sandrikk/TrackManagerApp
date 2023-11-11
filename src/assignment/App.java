@@ -48,7 +48,8 @@ public class App {
             System.out.println("2. Search for a station by code (hash table)");
             System.out.println("3. Search for a station by name (binary search)");
             System.out.println("5. A* algorithm");
-            System.out.println("6. Exit");
+            System.out.println("6. Dijkstra algorithm");
+            System.out.println("7. Exit");
 
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
@@ -132,7 +133,7 @@ public class App {
                         if (shortestPath.isEmpty()) {
                             System.out.println("No path found between the given stations.");
                         } else {
-                            System.out.println("Shortest path: " + shortestPath);
+                            System.out.println("Shortest path (A*): " + shortestPath);
                         }
                     } else {
                         System.out.println("One or both of the station codes are invalid.");
@@ -140,6 +141,24 @@ public class App {
                     break;
 
                 case 6:
+                    System.out.print("Enter the code of the first station: ");
+                    String startStationCodeDijkstra = scanner.nextLine().toLowerCase();
+                    System.out.print("Enter the code of the second station: ");
+                    String goalStationCodeDijkstra = scanner.nextLine().toLowerCase();
+
+                    if (stationMap.containsKey(startStationCodeDijkstra) && stationMap.containsKey(goalStationCodeDijkstra)) {
+                        List<String> shortestPathDijkstra = GraphUtils.findShortestPathDijkstra(connectionGraph, startStationCodeDijkstra, goalStationCodeDijkstra);
+
+                        if (shortestPathDijkstra.isEmpty()) {
+                            System.out.println("No path found between the given stations.");
+                        } else {
+                            System.out.println("Shortest path (Dijkstra): " + shortestPathDijkstra);
+                        }
+                    } else {
+                        System.out.println("One or both of the station codes are invalid.");
+                    }
+                    break;
+                case 7:
                     System.out.println("Exiting the program.");
                     scanner.close();
                     System.exit(0);
