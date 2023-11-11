@@ -1,31 +1,46 @@
 package assignment;
 
+import graphs.WeightedMatrixGraph;
 import heap.MinHeap;
 import lists.DoublyLinkedList;
 import lists.SortedList;
-import maps.HashMap;
+import maps.MyHashMap;
 import model.Station;
 import model.Track;
-import utils.Astar;
 import utils.CsvReader;
+import utils.GraphUtils;
 import utils.ListUtils;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class App {
     static DoublyLinkedList<Station> stationsDoubly = new DoublyLinkedList<>();
     static ArrayList<Station> stationsArrayList = new ArrayList<>();
     static ArrayList<Track> tracksArrayList = new ArrayList<>();
+    private static WeightedMatrixGraph<String> connectionGraph;
     static SortedList<Station> sortedStations = new SortedList<>();
-    static HashMap<String, Station> stationHashMap = new HashMap<>();
+    static HashMap<String, Station> stationMap = new HashMap<>();
+    static MyHashMap<String, Station> stationMyMap = new MyHashMap<>();
+
+
     public static void main(String[] args) {
-        // Call the method to read stations from CSV
         readStationsFromCSV();
+
+        // Call the method to read stations from CSV
+        String[] stationCodes = stationsArrayList.stream()
+                .map(Station::getCode)
+                .toArray(String[]::new);
+        connectionGraph = new WeightedMatrixGraph<>(true, stationCodes);
+
+        //System.out.println("Stations added to the graph: " + Arrays.toString(stationCodes));
+
+
         readTracksFromCSV();
         Scanner scanner = new Scanner(System.in);
+
+        System.out.println(connectionGraph.toGraphViz());
+
+
 
         while (true) {
             System.out.println("Menu:");
@@ -60,7 +75,7 @@ public class App {
                     System.out.print("Insert stations code: ");
                     String inputCode = scanner.nextLine();
                     System.out.println(inputCode);
-                    Station foundStationByCode = stationHashMap.get(inputCode); // Retrieve foundStationByCode from the table
+                    Station foundStationByCode = stationMyMap.get(inputCode); // Retrieve foundStationByCode from the table
                     if (foundStationByCode != null) {
                         // Station found
                         System.out.println(foundStationByCode);
@@ -111,9 +126,17 @@ public class App {
                     System.out.print("Enter the code of the second station: ");
                     String goalStationCode = scanner.nextLine().toLowerCase();
 
-                    // Implement A* algorithm to find the shortest path
-                    List<String> shortestPath = astarPath(startStationCode, goalStationCode);
-                    System.out.println("Shortest path: " + shortestPath);
+                    if (stationMap.containsKey(startStationCode) && stationMap.containsKey(goalStationCode)) {
+                        List<String> shortestPath = GraphUtils.findShortestPathAStar(connectionGraph, startStationCode, goalStationCode, stationMap);
+
+                        if (shortestPath.isEmpty()) {
+                            System.out.println("No path found between the given stations.");
+                        } else {
+                            System.out.println("Shortest path: " + shortestPath);
+                        }
+                    } else {
+                        System.out.println("One or both of the station codes are invalid.");
+                    }
                     break;
 
                 case 6:
@@ -149,11 +172,13 @@ public class App {
             double geoLat = Double.parseDouble(fields[9]);
             double geoLng = Double.parseDouble(fields[10]);
 
-            Station newStation = new Station(id, code, uic, name, slug, country, type, geoLat, geoLng);
+            Station newStation = new Station(id, code.toLowerCase(), uic, name, slug, country, type, geoLat, geoLng);
             stationsDoubly.add(newStation);
             sortedStations.add(newStation);
-            stationHashMap.put(newStation.getCode() ,newStation);
+            stationMyMap.put(newStation.getCode() ,newStation);
+            stationMap.put(newStation.getCode(), newStation);
             stationsArrayList.add(newStation);
+
 
         }
     }
@@ -164,39 +189,34 @@ public class App {
         List<String[]> csvData = csvReader.readCsv();
 
         for (String[] fields : csvData) {
-            String firstStation = fields[1];
-            String secondStation = fields[2];
-            int distance = Integer.parseInt(fields[3]);
-            Track newTrack = new Track(firstStation, secondStation, distance);
+            String firstStationCode = fields[0];
+            String secondStationCode = fields[1];
+            int distance = Integer.parseInt(fields[2]);
+            Track newTrack = new Track(firstStationCode, secondStationCode, distance);
 
-            tracksArrayList.add(newTrack);
+            //tracksArrayList.add(newTrack);
+            //connectionGraph.connect(firstStation, secondStation, distance);
+
+            // Debug: Check if station codes exist
+            if (!stationMap.containsKey(firstStationCode.toLowerCase())) {
+                System.out.println("Station first not found in map: " + firstStationCode);
+            }
+            if (!stationMap.containsKey(secondStationCode.toLowerCase())) {
+                System.out.println("Station sec not found in map: " + secondStationCode);
+            }
+
+            if (stationMap.containsKey(firstStationCode) && stationMap.containsKey(secondStationCode)) {
+                connectionGraph.connect(firstStationCode, secondStationCode, distance);
+                tracksArrayList.add(newTrack);
+
+                //System.out.println("Connection added: " + firstStationCode + " - " + secondStationCode + " with distance " + distance);
+
+            }
+
+
+
         }
 
-    }
-    public static List<String> astarPath(String startStationCode, String goalStationCode) {
-        // Print the content of stationHashMap for debugging
-        System.out.println("stationHashMap: " + stationHashMap);
-
-        // Find the corresponding stations for the provided station codes
-        Station startStation = stationHashMap.get(startStationCode);
-        Station goalStation = stationHashMap.get(goalStationCode);
-
-        // Print the station codes for debugging
-        System.out.println("startStationCode: " + startStationCode);
-        System.out.println("goalStationCode: " + goalStationCode);
-
-        if (startStation != null && goalStation != null) {
-            // Create an utils.Astar instance
-            Astar astar = new Astar();
-            astar.printMapContents();
-
-            // Find the shortest path using A* algorithm
-            List<String> shortestPath = astar.astar(startStation.getCode(), goalStation.getCode());
-
-            return shortestPath;
-        } else {
-            return null; // Invalid station codes provided
-        }
     }
 
 

@@ -10,14 +10,12 @@ import java.util.regex.Pattern;
 
 public class CsvReader {
     private final String filePath;
-    private final Pattern pattern; // Add a Pattern field
-    private final String idRegex = "[0-9]+";
-    private final String codeRegex = "[A-Z]+";
-    private int counter = 1; // headings
+    private final Pattern pattern;
+    private int counter = 1;
 
     public CsvReader(String filePath, String regex) {
         this.filePath = filePath;
-        this.pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE); // Compile the regex pattern
+        this.pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
     }
 
     public List<String[]> readCsv() {

@@ -14,6 +14,14 @@ public class WeightedMatrixGraph<V> extends AbstractGraph<V> {
         this.directed = directed;
         this.connections = new boolean[vertices.length][vertices.length];
         this.weights = new double[vertices.length][vertices.length];
+
+        for (int i = 0; i < vertices.length; i++) {
+            for (int j = 0; j < vertices.length; j++) {
+                if (i != j) {
+                    weights[i][j] = Double.POSITIVE_INFINITY;
+                }
+            }
+        }
     }
 
     public boolean isDirected() {
@@ -52,6 +60,30 @@ public class WeightedMatrixGraph<V> extends AbstractGraph<V> {
 
         return neighbors;
     }
+
+    public String toGraphViz() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("digraph WeightedMatrixGraph {\n");
+
+        for (int i = 0; i < vertices.length; i++) {
+            for (int j = 0; j < vertices.length; j++) {
+                if (connections[i][j]) {
+                    // Use -> for all edges, indicating a directed graph visualization
+                    sb.append("    ")
+                            .append(vertices[i])
+                            .append(" -> ")
+                            .append(vertices[j])
+                            .append(" [label=\"")
+                            .append(weights[i][j])
+                            .append("\"];\n");
+                }
+            }
+        }
+
+        sb.append("}\n");
+        return sb.toString();
+    }
+
 
 
 }

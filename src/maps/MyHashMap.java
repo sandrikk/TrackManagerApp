@@ -3,11 +3,11 @@ package maps;
 import lists.DoublyLinkedList;
 import lists.Node;
 
-public class HashMap<K, V> {
+public class MyHashMap<K, V> {
     private final DoublyLinkedList<Entry<K, V>>[] buckets;
     private int size;
 
-    public HashMap() {
+    public MyHashMap() {
         buckets = new DoublyLinkedList[10];
         size = 0;
     }
