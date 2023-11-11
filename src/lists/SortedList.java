@@ -4,21 +4,13 @@ import java.util.Comparator;
 
 public class SortedList <T extends Comparable<T>> implements List<T> {
 
-    private Node<T> head = null;
-    private Node<T> tail = null;
+    private DoublyNode<T> head = null;
+    private DoublyNode<T> tail = null;
     private int currentSize = 0;
-
-    public void print() {
-        Node<T> current = head;
-        while (current != null) {
-            System.out.println(current.data);
-            current = current.next;
-        }
-    }
 
     @Override
     public boolean add(T element) {
-        Node<T> newNode = new Node<>(element);
+        DoublyNode<T> newNode = new DoublyNode<>(element);
         currentSize++;
 
         if (head == null) {
@@ -29,7 +21,7 @@ public class SortedList <T extends Comparable<T>> implements List<T> {
         }
 
         // Find the correct position to insert the new element
-        Node<T> current = head;
+        DoublyNode<T> current = head;
         while (current != null && ((Comparable<T>) element).compareTo(current.data) > 0) {
             current = current.next;
         }
@@ -55,25 +47,32 @@ public class SortedList <T extends Comparable<T>> implements List<T> {
         return true;
     }
 
-
-    @Override
-    public void add(int index, T element) {
-
-    }
-
     @Override
     public boolean contains(T element) {
+        if (element == null) {
+            return false;
+        }
+        DoublyNode<T> current = head;
+        while (current != null) {
+            if (current.data.equals(element)) {
+                return true;
+            }
+            current = current.next;
+        }
         return false;
+
     }
 
     @Override
     public void clear() {
-
+        head = null;
+        tail = null;
+        currentSize = 0;
     }
 
-    private Node<T> getNodeAtIndex(int index) {
+    public DoublyNode<T> getNodeAtIndex(int index) {
         assert index < currentSize : "Index out of bounds";
-        Node<T> nodeAtIndex = head;
+        DoublyNode<T> nodeAtIndex = head;
         //If the index is closer to the head of the list its more efficient to start from the head and move forward
         if (index < currentSize / 2) {
             for (int i = 0; i < index; i++) {
@@ -92,34 +91,79 @@ public class SortedList <T extends Comparable<T>> implements List<T> {
 
     @Override
     public int indexOf(T element) {
-        return 0;
+        int index = 0;
+        DoublyNode<T> current = head;
+        while (current != null) {
+            if (current.data.equals(element)) {
+                return index;
+            }
+            index++;
+            current = current.next;
+        }
+        return -1; // Element not found
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return head == null;
     }
 
     @Override
     public int size() {
-        return 0;
+        return currentSize;
     }
 
     @Override
     public T get(int index) throws ArrayIndexOutOfBoundsException {
         if (index> currentSize-1) throw  new ArrayIndexOutOfBoundsException();
-        Node<T> linkAtIndex = getNodeAtIndex(index);
+        DoublyNode<T> linkAtIndex = getNodeAtIndex(index);
         return linkAtIndex.data;
     }
 
     @Override
     public boolean remove(T node) {
+        if (node == null) {
+            return false;
+        }
+        DoublyNode<T> current = head;
+        while (current != null) {
+            if (current.data.equals(node)) {
+                if (current.prev != null) {
+                    current.prev.next = current.next;
+                } else {
+                    head = current.next; // Removing the head
+                }
+                if (current.next != null) {
+                    current.next.prev = current.prev;
+                } else {
+                    tail = current.prev; // Removing the tail
+                }
+                currentSize--;
+                return true;
+            }
+            current = current.next;
+        }
         return false;
     }
 
     @Override
     public boolean remove(int index) {
-        return false;
+        if (index < 0 || index >= currentSize) {
+            throw new IndexOutOfBoundsException();
+        }
+        DoublyNode<T> toRemove = getNodeAtIndex(index);
+        if (toRemove.prev != null) {
+            toRemove.prev.next = toRemove.next;
+        } else {
+            head = toRemove.next; // Removing the head
+        }
+        if (toRemove.next != null) {
+            toRemove.next.prev = toRemove.prev;
+        } else {
+            tail = toRemove.prev; // Removing the tail
+        }
+        currentSize--;
+        return true;
     }
 
     public T binarySearch(Comparator<T> comparator, T key) {
@@ -143,11 +187,5 @@ public class SortedList <T extends Comparable<T>> implements List<T> {
 
         return null; // Not found
     }
-
-
-
-
-
-
 
 }

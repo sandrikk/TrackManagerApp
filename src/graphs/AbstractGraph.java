@@ -10,15 +10,15 @@ public class AbstractGraph<V> {
     }
 
 
-    protected V[] getVertices() {
+    public V[] getVertices() {
         return vertices;
     }
 
-    protected int getSize() {
+    public int getSize() {
         return vertices.length;
     }
 
-    protected int getIndex(V vertex) {
+    public int getIndex(V vertex) {
         for (int i = 0; i < vertices.length; i++) {
             if (vertices[i].equals(vertex)) {
                 return i;
@@ -27,7 +27,7 @@ public class AbstractGraph<V> {
         return -1;
     }
 
-    protected boolean isEmpty() {
+    public boolean isEmpty() {
         return vertices.length == 0;
     }
 

@@ -2,13 +2,13 @@ package lists;
 
 public class DoublyLinkedList<T> implements List<T> {
 
-    private Node<T> head = null;
-    private Node<T> tail = null;
+    private DoublyNode<T> head = null;
+    private DoublyNode<T> tail = null;
     private int currentSize = 0;
 
     @Override
     public boolean add(T node) {
-        Node<T> newNode = new Node<>(node);
+        DoublyNode<T> newNode = new DoublyNode<>(node);
         if (head == null) {
             head = newNode;
             tail = newNode;
@@ -21,20 +21,19 @@ public class DoublyLinkedList<T> implements List<T> {
         return false;
     }
 
-    @Override
     public void add(int index, T node) throws ArrayIndexOutOfBoundsException {
         if (node == null)
             throw new NullPointerException();
         if (index > currentSize - 1)
             throw new ArrayIndexOutOfBoundsException();
-        Node<T> linkNode = new Node<>(node);
+        DoublyNode<T> linkNode = new DoublyNode<>(node);
         currentSize++;
         if (index == 0) {
             linkNode.next = head;
             head = linkNode;
             return;
         }
-        Node<T> insertAt = getNodeAtIndex(index - 1);
+        DoublyNode<T> insertAt = getNodeAtIndex(index - 1);
         linkNode.next = insertAt.next;
         insertAt.next = linkNode;
     }
@@ -48,7 +47,7 @@ public class DoublyLinkedList<T> implements List<T> {
     public T get(int index) throws ArrayIndexOutOfBoundsException {
         if (index > currentSize - 1)
             throw new ArrayIndexOutOfBoundsException();
-        Node<T> linkAtIndex = getNodeAtIndex(index);
+        DoublyNode<T> linkAtIndex = getNodeAtIndex(index);
         return linkAtIndex.data;
     }
 
@@ -64,8 +63,8 @@ public class DoublyLinkedList<T> implements List<T> {
         if (index == 0) {
             head = head.next;
         } else {
-            Node<T> toChange = getNodeAtIndex(index - 1);
-            Node<T> toRemove = getNodeAtIndex(index);
+            DoublyNode<T> toChange = getNodeAtIndex(index - 1);
+            DoublyNode<T> toRemove = getNodeAtIndex(index);
             toChange.next = toRemove.next;
             toRemove.next = null;
         }
@@ -101,9 +100,9 @@ public class DoublyLinkedList<T> implements List<T> {
         tail = null;
     }
 
-    private Node<T> getNodeAtIndex(int index) {
+    private DoublyNode<T> getNodeAtIndex(int index) {
         assert index < currentSize : "Index out of bounds";
-        Node<T> nodeAtIndex = head;
+        DoublyNode<T> nodeAtIndex = head;
         if (index < currentSize / 2) {
             for (int i = 0; i < index; i++) {
                 nodeAtIndex = nodeAtIndex.next;
@@ -117,7 +116,7 @@ public class DoublyLinkedList<T> implements List<T> {
         return nodeAtIndex;
     }
 
-    private int find(Node<T> t, int step, T data) {
+    private int find(DoublyNode<T> t, int step, T data) {
         if (data == null)
             throw new NullPointerException();
         if (t.data.equals(data)) {
@@ -129,11 +128,11 @@ public class DoublyLinkedList<T> implements List<T> {
         return find(t.next, ++step, data);
     }
 
-    public Node<T> getHead() {
+    public DoublyNode<T> getHead() {
         return head;
     }
 
-    public Node<T> getTail() {
+    public DoublyNode<T> getTail() {
         return tail;
     }
 }

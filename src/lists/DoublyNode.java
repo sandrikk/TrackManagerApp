@@ -1,19 +1,19 @@
 package lists;
 
-public class Node<T> {
-    Node<T> prev;
-    Node<T> next;
+public class DoublyNode<T> {
+    DoublyNode<T> prev;
+    DoublyNode<T> next;
     T data;
 
-    public Node(T data) {
+    public DoublyNode(T data) {
         this.data = data;
     }
 
-    public Node<T> getPrev() {
+    public DoublyNode<T> getPrev() {
         return prev;
     }
 
-    public Node<T> getNext() {
+    public DoublyNode<T> getNext() {
         return next;
     }
 

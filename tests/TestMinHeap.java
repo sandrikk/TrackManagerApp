@@ -1,4 +1,5 @@
 import heap.MinHeap;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,12 +19,12 @@ public class TestMinHeap {
     @Test
     void testIsEmptyWhenEmptyShouldReturnTrue() {
         // integers
-        assertEquals(0, minHeapIntegers.getSize());
-        assertTrue(minHeapIntegers.isEmpty());
+        Assertions.assertEquals(0, minHeapIntegers.getSize());
+        Assertions.assertTrue(minHeapIntegers.isEmpty());
 
         // strings
-        assertEquals(0, minHeapStrings.getSize());
-        assertTrue(minHeapStrings.isEmpty());
+        Assertions.assertEquals(0, minHeapStrings.getSize());
+        Assertions.assertTrue(minHeapStrings.isEmpty());
     }
 
     @Test
@@ -171,6 +172,29 @@ public class TestMinHeap {
         assertEquals(16, (int) minHeapIntegers.peek());
         assertEquals(9, minHeapIntegers.getSize());
     }
+
+    @Test
+    public void testGraphViz() {
+        // Given
+        MinHeap<Integer> minHeap = new MinHeap<>(Integer.class, 10);
+        minHeap.push(10);
+        minHeap.push(20);
+        minHeap.push(5);
+        minHeap.buildHeap();
+
+        // When
+        String graphVizOutput = minHeap.graphViz();
+
+        // Then
+        String expectedOutput =
+                "diGraph MinHeap {\n" +
+                        "    5 -> 20;\n" +
+                        "    5 -> 10;\n" +
+                        "}\n";
+
+        Assertions.assertEquals(expectedOutput, graphVizOutput, "The graphViz output should match the expected graph representation.");
+    }
+
 
 
 

@@ -1,7 +1,7 @@
 package maps;
 
 import lists.DoublyLinkedList;
-import lists.Node;
+import lists.DoublyNode;
 
 public class MyHashMap<K, V> {
     private final DoublyLinkedList<Entry<K, V>>[] buckets;
@@ -22,7 +22,7 @@ public class MyHashMap<K, V> {
 
         // Check if the key already exists in the bucket
         DoublyLinkedList<Entry<K, V>> bucket = buckets[index];
-        Node<Entry<K, V>> node = bucket.getHead();
+        DoublyNode<Entry<K, V>> node = bucket.getHead();
         while (node != null) {
             if (node.getData().getKey().equals(key)) {
                 node.getData().setValue(value);
@@ -44,7 +44,7 @@ public class MyHashMap<K, V> {
 
         // Search for the key in the bucket
         DoublyLinkedList<Entry<K, V>> bucket = buckets[index];
-        Node<Entry<K, V>> entry = bucket.getHead();
+        DoublyNode<Entry<K, V>> entry = bucket.getHead();
         while (entry != null) {
             if (entry.getData().getKey().equals(key)) {
                 return entry.getData().getValue();

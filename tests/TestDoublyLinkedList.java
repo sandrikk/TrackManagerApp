@@ -1,5 +1,5 @@
 import lists.DoublyLinkedList;
-import lists.Node;
+import lists.DoublyNode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -219,7 +219,7 @@ public class TestDoublyLinkedList {
 
     @Test
     public void testGetHead() {
-        Node<Integer> head = listOfNumbers.getHead();
+        DoublyNode<Integer> head = listOfNumbers.getHead();
         Assertions.assertNull(head);
 
         listOfNumbers.add(5);
@@ -233,7 +233,7 @@ public class TestDoublyLinkedList {
 
     @Test
     public void testGetTail() {
-        Node<Integer> tail = listOfNumbers.getTail();
+        DoublyNode<Integer> tail = listOfNumbers.getTail();
         Assertions.assertNull(tail);
 
         listOfNumbers.add(5);
@@ -256,6 +256,44 @@ public class TestDoublyLinkedList {
         listOfNumbers.add(2, 7);
         Assertions.assertEquals(7, listOfNumbers.get(2));
 
+    }
+
+    @Test
+    public void testGetNext() {
+        // Set up a linked list with some nodes
+        DoublyLinkedList<Integer> list = new DoublyLinkedList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+
+        // Get references to nodes
+        DoublyNode<Integer> head = list.getHead();
+        DoublyNode<Integer> middle = head.getNext();
+        DoublyNode<Integer> tail = list.getTail();
+
+        // Test getNext method
+        Assertions.assertEquals(middle, head.getNext(), "Head's next should be the middle node");
+        Assertions.assertEquals(tail, middle.getNext(), "Middle's next should be the tail node");
+        Assertions.assertNull(tail.getNext(), "Tail's next should be null");
+    }
+
+    @Test
+    public void testGetPrev() {
+        // Set up a linked list with some nodes
+        DoublyLinkedList<Integer> list = new DoublyLinkedList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+
+        // Get references to nodes
+        DoublyNode<Integer> head = list.getHead();
+        DoublyNode<Integer> middle = head.getNext();
+        DoublyNode<Integer> tail = list.getTail();
+
+        // Test getPrev method
+        Assertions.assertNull(head.getPrev(), "Head's prev should be null");
+        Assertions.assertEquals(head, middle.getPrev(), "Middle's prev should be the head node");
+        Assertions.assertEquals(middle, tail.getPrev(), "Tail's prev should be the middle node");
     }
 }
 

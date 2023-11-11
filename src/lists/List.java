@@ -4,8 +4,6 @@ public interface List<T> {
 
     boolean add(T node);
 
-    void add(int index, T node);
-
     boolean contains(T node);
 
     T get(int index);

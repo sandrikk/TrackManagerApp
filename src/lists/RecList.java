@@ -12,14 +12,11 @@ public class RecList<T> {
     public void add(T newData){
         if(newData == null){
             throw new IllegalArgumentException("Recursive list cannot store null elements");
-        }
-        else if(isEmpty()){
+        } else if(isEmpty()){
             this.data = newData;
             this.rest = new RecList<>();
-        }else{
-            // this about this...
-            assert false : "this part hasn't been implemented";
-
+        } else {
+            this.rest.add(newData);
         }
     }
 
@@ -27,6 +24,7 @@ public class RecList<T> {
         assert (data == null) == (rest == null) : "Data and rest both should be filled or be empty";
         return data == null;
     }
+
 
     public int getCount() {
         if (isEmpty()) {
@@ -37,13 +35,18 @@ public class RecList<T> {
         }
     }
 
-    public boolean contains(T data) {
-        if (data == null) {
-            // this.data.equals(data);
-            // Homework : (
+    public boolean contains(T dataToFind) {
+        if (dataToFind == null) {
+            throw new IllegalArgumentException("Cannot search for null elements");
+        }
+        if (isEmpty()) {
             return false;
         }
-        return false;
+        if (data.equals(dataToFind)) {
+            return true;
+        } else {
+            return rest.contains(dataToFind);
+        }
     }
 
     @Override
@@ -55,6 +58,8 @@ public class RecList<T> {
             return "{" + getData().toString() + ", " + rest.toString() + "}";
         }
     }
+
+
 
 
 }
