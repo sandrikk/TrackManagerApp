@@ -54,12 +54,13 @@ public class App {
             System.out.println("5. Sort an ArrayList of connections by length (selectionsort");
             System.out.println("6. A* algorithm");
             System.out.println("7. Dijkstra algorithm");
+            System.out.println("8. MCST algorithm - Prim");
             System.out.println("9. Print AVL tree with stations");
             System.out.println("10. Exit");
 
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume the newline character
+            scanner.nextLine();
 
             switch (choice) {
 
@@ -204,7 +205,7 @@ public class App {
                     break;
                 case 9:
                     System.out.println(stationAVLTree.toGraphVizAVLTree());
-                case 11:
+                case 10:
                     System.out.println("Exiting the program.");
                     scanner.close();
                     System.exit(0);
