@@ -98,7 +98,7 @@ public class Drawing extends JPanel {
 
     private static Point convertGeoToScreen(double lat, double lng) {
         // You need a real implementation here
-        return new Point((int) (lng * 40), (int) (lat * 40));
+        return new Point((int) (lng * 20), (int) (lat * 20));
     }
 
 
