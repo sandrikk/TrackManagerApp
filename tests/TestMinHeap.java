@@ -125,17 +125,6 @@ public class TestMinHeap {
         assertEquals(minHeapStrings.getSize(), 2);
 
     }
-
-    /*
-      private void percolateUp(int index) {
-        int parentIndex = (index - 1) / 2;
-        while (index > 0 && items[index].compareTo(items[parentIndex]) < 0) {
-            swap(index, parentIndex);
-            index = parentIndex;
-            parentIndex = (index - 1) / 2;
-        }
-    }
-     */
     @Test
     void testPercolateUpWithIntegersShouldPass() {
         minHeapIntegers.push(21);

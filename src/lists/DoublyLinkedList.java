@@ -132,6 +132,10 @@ public class DoublyLinkedList<T> implements List<T> {
         return head;
     }
 
+    public void setHead(DoublyNode<T> head) {
+        this.head = head;
+    }
+
     public DoublyNode<T> getTail() {
         return tail;
     }

@@ -65,4 +65,11 @@ public class BinaryNode<T extends Comparable<T>> {
         return 1 + Math.max(leftHeight, rightHeight);
     }
 
+    public void setLeft(BinaryNode<T> left) {
+        this.left = left;
+    }
+
+    public void setParent(BinaryNode<T> parent) {
+        this.parent = parent;
+    }
 }

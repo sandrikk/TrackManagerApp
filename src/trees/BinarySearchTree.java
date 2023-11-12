@@ -97,7 +97,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
         return node;
     }
 
-    public String toGraphVizBST() {
+    public String toGraphViz() {
         StringBuilder sb = new StringBuilder();
         sb.append("diGraph BinarySearchTree {\n");
         toGraphVizBST(root, sb);

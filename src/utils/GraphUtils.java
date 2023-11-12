@@ -146,38 +146,9 @@ public class GraphUtils {
     }
 
 
-    private record AStarNode(String code, double fscore, double gScore) {
-        // Constructor
+    private record AStarNode(String code, double fscore, double gScore) { }
 
-        // Override equals and hashCode based on Node code
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            AStarNode node = (AStarNode) o;
-            return Objects.equals(code, node.code);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(code);
-        }
-    }
-
-    private record DijkstraNode(String code, double distance) {
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof DijkstraNode that)) return false;
-            return code.equals(that.code);
-        }
-
-        @Override
-        public int hashCode() {
-            return code.hashCode();
-        }
-    }
+    private record DijkstraNode(String code, double distance) {}
 
 
     //prim

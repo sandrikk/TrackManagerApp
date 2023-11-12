@@ -36,6 +36,53 @@ public class MyHashMap<K, V> {
         size++;
     }
 
+    public boolean contains(K key) {
+        int index = hash(key);
+        if (buckets[index] == null) {
+            return false;
+        }
+
+        DoublyLinkedList<Entry<K, V>> bucket = buckets[index];
+        DoublyNode<Entry<K, V>> node = bucket.getHead();
+        while (node != null) {
+            if (node.getData().getKey().equals(key)) {
+                return true;
+            }
+            node = node.getNext();
+        }
+        return false;
+    }
+
+    public void remove(K key) {
+        int index = hash(key);
+        if (buckets[index] == null) {
+            return;
+        }
+
+        DoublyLinkedList<Entry<K, V>> bucket = buckets[index];
+        DoublyNode<Entry<K, V>> previous = null;
+        DoublyNode<Entry<K, V>> current = bucket.getHead();
+
+        while (current != null) {
+            if (current.getData().getKey().equals(key)) {
+                if (previous == null) {
+                    // Removing the head node
+                    bucket.setHead(current.getNext());
+                } else {
+                    // Removing a middle or last node
+                    previous.setNext(current.getNext());
+                }
+                if (current.getNext() != null) {
+                    current.getNext().setPrev(previous);
+                }
+                size--;
+                return;
+            }
+            previous = current;
+            current = current.getNext();
+        }
+    }
+
     public V get(K key) {
         int index = hash(key);
         if (buckets[index] == null) {
@@ -56,8 +103,6 @@ public class MyHashMap<K, V> {
     }
 
     private int hash(K key) {
-        // Implement your hash function here
-        // You can use the key's hash code or create a custom hash function
         return Math.abs(key.hashCode() % buckets.length);
     }
 

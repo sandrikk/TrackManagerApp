@@ -3,16 +3,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 public class TestHashMap {
 
     private MyHashMap<String, Integer> myHashMap;
 
     @BeforeEach
     public void setUp() {
-
         myHashMap = new MyHashMap<>();
     }
 
@@ -22,7 +18,7 @@ public class TestHashMap {
         myHashMap.put("key2", 2);
         myHashMap.put("key3", 3);
 
-        assertEquals(3, myHashMap.getSize());
+        Assertions.assertEquals(3, myHashMap.getSize());
     }
 
     @Test
@@ -31,31 +27,27 @@ public class TestHashMap {
         myHashMap.put("key2", 2);
         myHashMap.put("key3", 3);
 
-        // Act: Update the value for an existing key
+
         myHashMap.put("key3", 4);
 
-        // Assert: Verify that the value for the key has been updated
-        assertEquals(Integer.valueOf(4), myHashMap.get("key3"));
+
+        Assertions.assertEquals(Integer.valueOf(4), myHashMap.get("key3"));
     }
 
     @Test
     public void testIsEmptyWhenEmptyShouldPass() {
-        assertEquals(0, myHashMap.getSize());
-        assertTrue(myHashMap.isEmpty());
+        Assertions.assertEquals(0, myHashMap.getSize());
+        Assertions.assertTrue(myHashMap.isEmpty());
     }
 
     @Test
     public void testAddNullNodeThrowsException() {
-        Assertions.assertThrows(NullPointerException.class, () -> {
-            myHashMap.put("key1", null);
-        });
+        Assertions.assertThrows(NullPointerException.class, () -> myHashMap.put("key1", null));
     }
 
     @Test
     public void testGetInvalidKeyThrowsException() {
-        Assertions.assertThrows(NullPointerException.class, () -> {
-            myHashMap.get("key1");
-        });
+        Assertions.assertThrows(NullPointerException.class, () -> myHashMap.get("key1"));
     }
 
     @Test
@@ -76,31 +68,98 @@ public class TestHashMap {
 
     @Test
     void testGetNonExistingKey() {
-        Assertions.assertThrows(NullPointerException.class, () -> {
-            myHashMap.get("nonExistingKey");
-        });
+        Assertions.assertThrows(NullPointerException.class, () -> myHashMap.get("nonExistingKey"));
     }
 
     @Test
     void testGetNullKey() {
-        // Assuming that the hash method properly handles null keys
-        Assertions.assertThrows(NullPointerException.class, () -> {
-            myHashMap.get(null);
-        });
+        Assertions.assertThrows(NullPointerException.class, () -> myHashMap.get(null));
     }
 
     @Test
     void testGetNonExistingKeyThrowsException() {
-        myHashMap.put("key1", 1); // Add a key to ensure the map is not empty
-        Assertions.assertThrows(NullPointerException.class, () -> {
-            myHashMap.get("nonExistingKey"); // This key was never added, so should throw
-        });
+        myHashMap.put("key1", 1);
+        Assertions.assertThrows(NullPointerException.class, () -> myHashMap.get("nonExistingKey"));
     }
 
     @Test
     void testGetFromEmptyMapThrowsException() {
-        Assertions.assertThrows(NullPointerException.class, () -> {
-            myHashMap.get("anyKey"); // Map is empty, any key should throw
-        });
+        Assertions.assertThrows(NullPointerException.class, () -> myHashMap.get("anyKey"));
+    }
+
+    @Test
+    public void testGetKeyNotInAnyBucketThrowsException() {
+        myHashMap.put("key1", 1);
+        myHashMap.put("key2", 2);
+
+        String nonExistentKey = "key3";
+        Assertions.assertThrows(NullPointerException.class,
+                () -> myHashMap.get(nonExistentKey),
+                "Key not found in the bucket."
+        );
+    }
+
+    @Test
+    public void testGetKeyNotAtHeadOfBucket() {
+        myHashMap.put("key1", 1);
+        myHashMap.put("key2", 2);
+
+        Integer value = myHashMap.get("key2");
+        Assertions.assertEquals(Integer.valueOf(2), value);
+    }
+
+    @Test
+    public void testContainsWithExistingKey() {
+        myHashMap.put("key1", 1);
+        Assertions.assertTrue(myHashMap.contains("key1"));
+    }
+
+    @Test
+    public void testContainsWithNonExistingKey() {
+        myHashMap.put("key1", 1);
+        Assertions.assertFalse(myHashMap.contains("key2"));
+    }
+
+    @Test
+    public void testRemoveExistingKey() {
+        myHashMap.put("key1", 1);
+        myHashMap.remove("key1");
+        Assertions.assertFalse(myHashMap.contains("key1"));
+    }
+
+    @Test
+    public void testRemoveNonExistingKey() {
+        myHashMap.put("key1", 1);
+        myHashMap.remove("key2");
+        Assertions.assertTrue(myHashMap.contains("key1"));
+    }
+
+    @Test
+    public void testRemoveKeyFromEmptyBucket() {
+        myHashMap.remove("key1");
+        Assertions.assertFalse(myHashMap.contains("key1"));
+    }
+
+    @Test
+    public void testRemoveKeyThatIsNotAtHeadOfBucket() {
+        myHashMap.put("key1", 1);
+        myHashMap.put("key2", 2);
+        myHashMap.put("key3", 3);
+        myHashMap.remove("key2");
+        Assertions.assertFalse(myHashMap.contains("key2"));
+        Assertions.assertTrue(myHashMap.contains("key1"));
+        Assertions.assertTrue(myHashMap.contains("key3"));
+    }
+
+    @Test
+    public void testRemoveOnlyKeyInBucket() {
+        myHashMap.put("key1", 1);
+        myHashMap.remove("key1");
+        Assertions.assertEquals(0, myHashMap.getSize());
+    }
+
+    @Test
+    public void testContainsKeyInEmptyMap() {
+        Assertions.assertFalse(myHashMap.contains("key1"));
     }
 }

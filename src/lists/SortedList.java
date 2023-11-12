@@ -14,30 +14,25 @@ public class SortedList <T extends Comparable<T>> implements List<T> {
         currentSize++;
 
         if (head == null) {
-            // The list is empty, so set the new node as both head and tail
             head = newNode;
             tail = newNode;
             return true;
         }
 
-        // Find the correct position to insert the new element
         DoublyNode<T> current = head;
         while (current != null && ((Comparable<T>) element).compareTo(current.data) > 0) {
             current = current.next;
         }
 
         if (current == head) {
-            // Insert at the beginning
             newNode.next = head;
             head.prev = newNode;
             head = newNode;
         } else if (current == null) {
-            // Insert at the end
             newNode.prev = tail;
             tail.next = newNode;
             tail = newNode;
         } else {
-            // Insert in the middle
             newNode.prev = current.prev;
             newNode.next = current;
             current.prev.next = newNode;
@@ -73,13 +68,11 @@ public class SortedList <T extends Comparable<T>> implements List<T> {
     public DoublyNode<T> getNodeAtIndex(int index) {
         assert index < currentSize : "Index out of bounds";
         DoublyNode<T> nodeAtIndex = head;
-        //If the index is closer to the head of the list its more efficient to start from the head and move forward
         if (index < currentSize / 2) {
             for (int i = 0; i < index; i++) {
                 nodeAtIndex = nodeAtIndex.next;
             }
 
-            //Else the index is closer to the tail of the list, it's more efficient to start from the tail and move backward.
         } else {
             nodeAtIndex = tail;
             for (int i = currentSize - 1; i > index; i--) {
@@ -100,7 +93,7 @@ public class SortedList <T extends Comparable<T>> implements List<T> {
             index++;
             current = current.next;
         }
-        return -1; // Element not found
+        return -1;
     }
 
     @Override
@@ -131,12 +124,12 @@ public class SortedList <T extends Comparable<T>> implements List<T> {
                 if (current.prev != null) {
                     current.prev.next = current.next;
                 } else {
-                    head = current.next; // Removing the head
+                    head = current.next;
                 }
                 if (current.next != null) {
                     current.next.prev = current.prev;
                 } else {
-                    tail = current.prev; // Removing the tail
+                    tail = current.prev;
                 }
                 currentSize--;
                 return true;
@@ -155,12 +148,12 @@ public class SortedList <T extends Comparable<T>> implements List<T> {
         if (toRemove.prev != null) {
             toRemove.prev.next = toRemove.next;
         } else {
-            head = toRemove.next; // Removing the head
+            head = toRemove.next;
         }
         if (toRemove.next != null) {
             toRemove.next.prev = toRemove.prev;
         } else {
-            tail = toRemove.prev; // Removing the tail
+            tail = toRemove.prev;
         }
         currentSize--;
         return true;
@@ -177,7 +170,7 @@ public class SortedList <T extends Comparable<T>> implements List<T> {
             int compareResult = comparator.compare(middleElement, key);
 
             if (compareResult == 0) {
-                return middleElement; // Found a match
+                return middleElement;
             } else if (compareResult < 0) {
                 left = middle + 1;
             } else {
@@ -185,7 +178,7 @@ public class SortedList <T extends Comparable<T>> implements List<T> {
             }
         }
 
-        return null; // Not found
+        return null;
     }
 
 }

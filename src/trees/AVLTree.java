@@ -76,7 +76,7 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 
 
     public BinaryNode<T> getRoot() {
-        return root; // assuming 'root' is the name of the root node in AVLTree
+        return root;
     }
 
     public String toGraphVizAVLTree() {

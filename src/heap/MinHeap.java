@@ -6,11 +6,8 @@ import java.lang.reflect.Array;
 public class MinHeap<T extends Comparable<T>> {
     private T[] items;
     private int size;
-    //private Comperator<T> comperator;
 
     public MinHeap(Class<T> clazz, int initialSize) {
-        //this.items = (T[])new Object[initialSize];
-        // no contains bc we dont need it
         this.items = (T[]) Array.newInstance(clazz, initialSize);
     }
 

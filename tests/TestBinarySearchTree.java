@@ -129,6 +129,20 @@ public class TestBinarySearchTree {
         Assertions.assertTrue(tree.contains(18));
     }
 
+    @Test
+    public void testToGraphViz() {
+        tree.add(5);
+        tree.add(3);
+        tree.add(7);
+
+        String expectedGraphViz = "diGraph BinarySearchTree {\n" +
+                "    5 -> 3;\n" +
+                "    5 -> 7;\n" +
+                "}\n";
+
+        Assertions.assertEquals(expectedGraphViz, tree.toGraphViz());
+    }
+
 
 }
 

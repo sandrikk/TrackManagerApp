@@ -8,6 +8,7 @@ import maps.MyHashMap;
 import model.Station;
 import model.Track;
 import sort.Sort;
+import trees.AVLTree;
 import utils.CsvReader;
 import utils.GraphUtils;
 import utils.ListUtils;
@@ -22,6 +23,7 @@ public class App {
     static SortedList<Station> sortedStations = new SortedList<>();
     static HashMap<String, Station> stationMap = new HashMap<>();
     static MyHashMap<String, Station> stationMyMap = new MyHashMap<>();
+    static AVLTree<String> stationAVLTree = new AVLTree<>();
 
 
     public static void main(String[] args) {
@@ -52,6 +54,7 @@ public class App {
             System.out.println("5. Sort an ArrayList of connections by length (selectionsort");
             System.out.println("6. A* algorithm");
             System.out.println("7. Dijkstra algorithm");
+            System.out.println("9. Print AVL tree with stations");
             System.out.println("10. Exit");
 
             System.out.print("Enter your choice: ");
@@ -77,9 +80,9 @@ public class App {
 
                 case 2:
                     System.out.print("Insert stations code: ");
-                    String inputCode = scanner.nextLine();
+                    String inputCode = scanner.nextLine().toLowerCase();
                     System.out.println(inputCode);
-                    Station foundStationByCode = stationMyMap.get(inputCode); // Retrieve foundStationByCode from the table
+                    Station foundStationByCode = stationMyMap.get(inputCode);
                     if (foundStationByCode != null) {
                         // Station found
                         System.out.println(foundStationByCode);
@@ -112,20 +115,13 @@ public class App {
                     }
                     break;
 
-
                 case 4:
                     System.out.println("Sorting tracks by length using merge sort...");
 
-                    // Define a comparator for Track objects based on their distance
                     Comparator<Track> trackComparator = Comparator.comparingInt(Track::getDistance);
-
-                    // Create an instance of your Sort class
                     Sort sort = new Sort();
 
-                    // Perform merge sort on tracksArrayList using the defined comparator
                     sort.mergeSort(tracksArrayList, trackComparator);
-
-                    // Optionally, print the sorted list to verify
                     for (Track track : tracksArrayList) {
                         System.out.println(track);
                     }
@@ -134,16 +130,10 @@ public class App {
                 case 5:
                     System.out.println("Sorting tracks by length using selection sort...");
 
-                    // Define a comparator for Track objects based on their distance
                     Comparator<Track> trackDistanceComparator = Comparator.comparingInt(Track::getDistance);
-
-                    // Create an instance of the Sort class
                     Sort sortInstance = new Sort();
 
-                    // Perform selection sort on tracksArrayList using the defined comparator
                     sortInstance.selectionSort(tracksArrayList, trackDistanceComparator);
-
-                    // Optionally, print the sorted list to verify
                     for (Track track : tracksArrayList) {
                         System.out.println(track);
                     }
@@ -212,8 +202,9 @@ public class App {
 
                     System.out.println("Total Track Length: " + totalLength);
                     break;
-
-                case 10:
+                case 9:
+                    System.out.println(stationAVLTree.toGraphVizAVLTree());
+                case 11:
                     System.out.println("Exiting the program.");
                     scanner.close();
                     System.exit(0);
@@ -228,9 +219,7 @@ public class App {
 
 
     public static void readStationsFromCSV() {
-        //CsvReader csvReader = new CsvReader("./resources/stations.csv", "^(\\\\d+),([A-Z]+),(\\\\d+),\\\"([^\\\"]+)\\\",\\\"([^\\\"]+)?\\\",\\\"([^\\\"]+)?\\\",\\\"([^\\\"]+)?\\\",([A-Z]+),([a-zA-Z0-9\\\\-]+),([A-Z]+),([0-9.]+),([0-9.]+)$");
-        //CsvReader csvReader = new CsvReader("./resources/stations.csv", "[0-9]+,[A-Za-z]+,[0-9]+,"[^"]*",'[^']*'s-[A-Za-z]+,[A-Za-z]+-[A-Za-z]+,[A-Za-z]+,[A-Za-z]+,[0-9]*\.[0-9]+,[0-9]*\.[0-9]+");
-        CsvReader csvReader = new CsvReader("./resources/stations.csv", "");
+        CsvReader csvReader = new CsvReader("./resources/stations.csv", "^(\\d+),([A-Z]+),([\\d]+),([^,]+),([^,]+),([^,]+),([\\w-]+),([A-Z]+),([\\w-]+),([\\-\\d.]+),([\\-\\d.]+)$");
 
 
         List<String[]> csvData = csvReader.readCsv();
@@ -252,8 +241,7 @@ public class App {
             stationMyMap.put(newStation.getCode() ,newStation);
             stationMap.put(newStation.getCode(), newStation);
             stationsArrayList.add(newStation);
-
-
+            stationAVLTree.add(newStation.getCode());
         }
     }
 
@@ -267,17 +255,6 @@ public class App {
             String secondStationCode = fields[1];
             int distance = Integer.parseInt(fields[2]);
             Track newTrack = new Track(firstStationCode, secondStationCode, distance);
-
-            //tracksArrayList.add(newTrack);
-            //connectionGraph.connect(firstStation, secondStation, distance);
-
-            // Debug: Check if station codes exist
-            if (!stationMap.containsKey(firstStationCode.toLowerCase())) {
-                System.out.println("Station first not found in map: " + firstStationCode);
-            }
-            if (!stationMap.containsKey(secondStationCode.toLowerCase())) {
-                System.out.println("Station sec not found in map: " + secondStationCode);
-            }
 
             if (stationMap.containsKey(firstStationCode) && stationMap.containsKey(secondStationCode)) {
                 connectionGraph.connect(firstStationCode, secondStationCode, distance);
@@ -320,6 +297,5 @@ public class App {
 
         return subgraph;
     }
-
 
 }

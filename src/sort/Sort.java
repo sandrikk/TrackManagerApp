@@ -5,7 +5,6 @@ import java.util.Comparator;
 import java.util.List;
 
 public class Sort {
-    // Generic merge sort for a list of items
     public <T> void mergeSort(List<T> list, Comparator<T> comparator) {
         if (list.size() <= 1) {
             return;
@@ -21,7 +20,6 @@ public class Sort {
         merge(list, left, right, comparator);
     }
 
-    // Helper method to merge two sorted lists
     public <T> void merge(List<T> list, List<T> left, List<T> right, Comparator<T> comparator) {
         int leftIndex = 0;
         int rightIndex = 0;
@@ -46,15 +44,13 @@ public class Sort {
 
     public <T> void selectionSort(List<T> list, Comparator<T> comparator) {
         for (int i = 0; i < list.size() - 1; i++) {
-            // Assume the minimum is the first element
             int minIndex = i;
             for (int j = i + 1; j < list.size(); j++) {
-                // Find the minimum element in the unsorted part of the list
                 if (comparator.compare(list.get(j), list.get(minIndex)) < 0) {
                     minIndex = j;
                 }
             }
-            // Swap the found minimum element with the first element
+
             if (minIndex != i) {
                 T temp = list.get(i);
                 list.set(i, list.get(minIndex));
@@ -62,6 +58,5 @@ public class Sort {
             }
         }
     }
-
 
 }

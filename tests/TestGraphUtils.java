@@ -5,10 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import utils.GraphUtils;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static utils.GraphUtils.findMinimumSpanningTreePrim;
 
@@ -80,6 +78,84 @@ class TestGraphUtils {
 
         // Assert the path is as expected
         assertEquals(Arrays.asList("A", "B", "C", "D"), path, "Path should be from A to D through B and C");
+
     }
+
+    @Test
+    void testFindMinimumSpanningTreePrim() {
+        // Create a graph
+        WeightedMatrixGraph<String> testGraph = new WeightedMatrixGraph<>(false, "A", "B", "C", "D", "E", "F", "G", "H", "I");
+
+        // Add edges with weights
+        testGraph.connect("A", "B", 4);
+        testGraph.connect("A", "H", 8);
+
+        testGraph.connect("B", "H", 11);
+        testGraph.connect("B", "C", 8);
+
+        testGraph.connect("C", "D", 7);
+        testGraph.connect("C", "F", 4);
+        testGraph.connect("C", "I", 2);
+
+        testGraph.connect("D", "E", 9);
+        testGraph.connect("D", "F", 14);
+
+        testGraph.connect("E", "F", 10);
+
+        testGraph.connect("F", "G", 2);
+
+        testGraph.connect("G", "H", 1);
+        testGraph.connect("G", "I", 6);
+
+        testGraph.connect("I", "H", 7);
+
+        // Find the MST using Prim's algorithm
+        List<GraphUtils.Edge<String>> mstEdges = GraphUtils.findMinimumSpanningTreePrim(testGraph);
+
+        // Calculate the total weight of the actual MST
+        double actualTotalWeight = mstEdges.stream().mapToDouble(GraphUtils.Edge::weight).sum();
+
+        // Define the expected total weight of the MST
+        double expectedTotalWeight = 4 + 8 + 2 + 4 + 2 + 1 + 7 + 9; // Sum of the weights of the expected edges
+
+        // Check if the total weight of the MST is as expected
+        assertEquals(expectedTotalWeight, actualTotalWeight, "Total weight of the MST should be correct");
+    }
+
+    @Test
+    void testToString() {
+        // Create an Edge object
+        GraphUtils.Edge<String> edge = new GraphUtils.Edge<>("Vertex1", "Vertex2", 5.0);
+
+        // Expected string representation
+        String expected = "Edge from Vertex1 to Vertex2 with weight 5.0";
+
+        // Assert that the toString method returns the expected string
+        assertEquals(expected, edge.toString(), "Edge toString should return the correct string representation.");
+    }
+
+    @Test
+    void testFindShortestPathAStarNoPath() {
+        // Create a graph with isolated station pairs
+        WeightedMatrixGraph<String> graph = new WeightedMatrixGraph<>(true, "A", "B", "X", "Y");
+
+        // Stations with coordinates
+        Map<String, Station> stationMap = new HashMap<>();
+        stationMap.put("A", new Station(1, "A", 1001, "Station A", "sta-a", "Country1", "Type1", 0, 0));
+        stationMap.put("B", new Station(2, "B", 1002, "Station B", "sta-b", "Country1", "Type1", 1, 1));
+        stationMap.put("X", new Station(3, "X", 1003, "Station X", "sta-x", "Country1", "Type1", 2, 2));
+        stationMap.put("Y", new Station(4, "Y", 1004, "Station Y", "sta-y", "Country1", "Type1", 3, 3));
+
+        // Connect only A and B, and X and Y
+        graph.connect("A", "B", 1);
+        graph.connect("X", "Y", 1);
+
+        // Attempt to find a path from "A" to "X" (no path should exist)
+        List<String> path = GraphUtils.findShortestPathAStar(graph, "A", "X", stationMap);
+
+        // Assert that the returned path is empty
+        assertEquals(Collections.emptyList(), path, "There should be no path from A to X");
+    }
+
 
 }

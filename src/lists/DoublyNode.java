@@ -29,10 +29,6 @@ public class DoublyNode<T> {
         this.next = next;
     }
 
-    public void setData(T data) {
-        this.data = data;
-    }
-
     public void disconnect() {
         if (next != null) {
             next.prev = null;
