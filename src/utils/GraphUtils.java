@@ -112,7 +112,7 @@ public class GraphUtils {
 
         double a = Math.pow(Math.sin(dlat / 2), 2)
                 + Math.cos(lat1) * Math.cos(lat2)
-                * Math.pow(Math.sin(dlon / 2),2);
+                * Math.pow(Math.sin(dlon / 2), 2);
         double c = 2 * Math.asin(Math.sqrt(a));
 
         double r = 6371; // Radius of the earth in kilometers. Use 3956 for miles
@@ -140,9 +140,9 @@ public class GraphUtils {
 
 
     private record AStarNode(String code, double fscore, double gScore) {
-    // Constructor
+        // Constructor
 
-    // Override equals and hashCode based on Node code
+        // Override equals and hashCode based on Node code
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -160,16 +160,74 @@ public class GraphUtils {
     private record DijkstraNode(String code, double distance) {
 
         @Override
-            public boolean equals(Object o) {
-                if (this == o) return true;
-                if (!(o instanceof DijkstraNode that)) return false;
-                return code.equals(that.code);
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof DijkstraNode that)) return false;
+            return code.equals(that.code);
+        }
+
+        @Override
+        public int hashCode() {
+            return code.hashCode();
+        }
+    }
+
+
+    //prim
+    public static List<Edge<String>> findMinimumSpanningTreePrim(WeightedMatrixGraph<String> graph) {
+        // A list to store the edges of the MST.
+        List<Edge<String>> mstEdges = new ArrayList<>();
+
+        // A set to keep track of vertices included in MST.
+        Set<String> inMst = new HashSet<>();
+
+        // A priority queue to select the next minimum weight edge connected to MST.
+        PriorityQueue<Edge<String>> edgesQueue = new PriorityQueue<>(Comparator.comparingDouble(Edge::weight));
+
+        // Start with the first vertex in the graph.
+        String startVertex = graph.getAllVertices().get(0);
+        inMst.add(startVertex);
+        addAllEdges(startVertex, graph, inMst, edgesQueue);
+
+        while (!edgesQueue.isEmpty() && inMst.size() < graph.getAllVertices().size()) {
+            Edge<String> edge = edgesQueue.poll();
+            if (inMst.contains(edge.vertex2)) {
+                continue; // Skip if the vertex is already included in the MST.
             }
 
-            @Override
-            public int hashCode() {
-                return code.hashCode();
+            mstEdges.add(edge); // Add the edge to MST.
+            inMst.add(edge.vertex2); // Include this vertex in MST.
+            addAllEdges(edge.vertex2, graph, inMst, edgesQueue); // Add all edges connected to the new vertex.
+        }
+
+        return mstEdges; // Return the list of edges that forms the MST.
+    }
+
+    private static void addAllEdges(String vertex, WeightedMatrixGraph<String> graph, Set<String> inMst, PriorityQueue<Edge<String>> edgesQueue) {
+        for (String neighbor : graph.getNeighbors(vertex)) {
+            if (!inMst.contains(neighbor)) {
+                edgesQueue.offer(new Edge<>(vertex, neighbor, graph.getWeight(vertex, neighbor)));
             }
         }
+    }
+
+    // Helper class to represent an edge in the graph.
+    public static class Edge<V> {
+        V vertex1;
+        V vertex2;
+        double weight;
+
+        public Edge(V vertex1, V vertex2, double weight) {
+            this.vertex1 = vertex1;
+            this.vertex2 = vertex2;
+            this.weight = weight;
+        }
+
+        public double weight() {
+            return weight;
+        }
+    }
+
+
 
 }

@@ -4,7 +4,24 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 
     @Override
     public void add(T data) {
-        super.add(data);
+        root = add(data, root);
+    }
+
+    private BinaryNode<T> add(T data, BinaryNode<T> node) {
+        if (node == null) {
+            return new BinaryNode<>(data); // Insert new node.
+        }
+
+        int compareResult = data.compareTo(node.data);
+
+        if (compareResult < 0) {
+            node.left = add(data, node.left);
+        } else if (compareResult > 0) {
+            node.right = add(data, node.right);
+        }
+
+        // Balance the node if necessary
+        return balance(node);
     }
 
     private BinaryNode<T> rotateRight(BinaryNode<T> node) {
@@ -24,25 +41,27 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 
     // Balance a node based on its balance factor
     private BinaryNode<T> balance(BinaryNode<T> node) {
-
         int balanceFactor = getBalanceFactor(node);
 
-        //Left Heavy
+        // Left Heavy situation
         if (balanceFactor > 1) {
+            // Check for Left-Right case
             if (getBalanceFactor(node.left) < 0) {
-                node.left = rotateLeft(node.left);
+                node.left = rotateLeft(node.left); // First left rotation on the left child
             }
-            return rotateRight(node);
-        }
-        //Right Heavy
-        if (balanceFactor < -1) {
-            if (getBalanceFactor(node.right) > 0) {
-                node.right = rotateRight(node.right);
-            }
-            return rotateLeft(node);
+            return rotateRight(node); // Then right rotation on the node
         }
 
-        return node;
+        // Right Heavy situation
+        if (balanceFactor < -1) {
+            // Check for Right-Left case
+            if (getBalanceFactor(node.right) > 0) {
+                node.right = rotateRight(node.right); // First right rotation on the right child
+            }
+            return rotateLeft(node); // Then left rotation on the node
+        }
+
+        return node; // Node is already balanced
     }
 
     //Get the balance factor of a node (height of left subtree - height of right subtree)
@@ -54,6 +73,7 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
         int rightHeight = (node.right != null) ? node.right.getHeight() : -1;
         return leftHeight - rightHeight;
     }
+
 
     public BinaryNode<T> getRoot() {
         return root; // assuming 'root' is the name of the root node in AVLTree
