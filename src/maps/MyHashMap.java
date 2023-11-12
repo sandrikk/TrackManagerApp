@@ -39,7 +39,7 @@ public class MyHashMap<K, V> {
     public V get(K key) {
         int index = hash(key);
         if (buckets[index] == null) {
-            throw new NullPointerException();
+            throw new NullPointerException("Bucket is null, key does not exist.");
         }
 
         // Search for the key in the bucket
@@ -52,8 +52,7 @@ public class MyHashMap<K, V> {
             entry = entry.getNext();
         }
 
-        // Key not found in the bucket
-        throw new NullPointerException();
+        throw new NullPointerException("Key not found in the bucket.");
     }
 
     private int hash(K key) {

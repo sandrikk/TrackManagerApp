@@ -81,4 +81,24 @@ public class TestAVLTree {
         Assertions.assertEquals(Integer.valueOf(3), root.getRight().getData(), "Right child should be 3");
     }
 
+    @Test
+    void testToGraphVizAVLTree() {
+        // Add elements to the AVL tree
+        avlTree.add(3);
+        avlTree.add(2);
+        avlTree.add(1); // This should cause a right rotation
+
+        // Expected GraphViz representation of the AVL tree after the above insertions
+        String expectedGraphViz = "diGraph AVLTree {\n" +
+                "    2 -> 1;\n" +
+                "    2 -> 3;\n" +
+                "}\n";
+
+        // Generate the GraphViz representation of the AVL tree
+        String actualGraphViz = avlTree.toGraphVizAVLTree();
+
+        // Assert that the actual GraphViz representation matches the expected one
+        Assertions.assertEquals(expectedGraphViz, actualGraphViz);
+    }
+
 }

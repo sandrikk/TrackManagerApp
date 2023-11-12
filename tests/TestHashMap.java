@@ -12,6 +12,7 @@ public class TestHashMap {
 
     @BeforeEach
     public void setUp() {
+
         myHashMap = new MyHashMap<>();
     }
 
@@ -63,5 +64,43 @@ public class TestHashMap {
         myHashMap.put("key2", 2);
         myHashMap.put("key3", 3);
         Assertions.assertEquals(1, myHashMap.get("key1"));
+    }
+
+    @Test
+    void testGetExistingKey() {
+        myHashMap.put("key1", 1);
+        myHashMap.put("key2", 2);
+        Assertions.assertEquals(1, myHashMap.get("key1"));
+        Assertions.assertEquals(2, myHashMap.get("key2"));
+    }
+
+    @Test
+    void testGetNonExistingKey() {
+        Assertions.assertThrows(NullPointerException.class, () -> {
+            myHashMap.get("nonExistingKey");
+        });
+    }
+
+    @Test
+    void testGetNullKey() {
+        // Assuming that the hash method properly handles null keys
+        Assertions.assertThrows(NullPointerException.class, () -> {
+            myHashMap.get(null);
+        });
+    }
+
+    @Test
+    void testGetNonExistingKeyThrowsException() {
+        myHashMap.put("key1", 1); // Add a key to ensure the map is not empty
+        Assertions.assertThrows(NullPointerException.class, () -> {
+            myHashMap.get("nonExistingKey"); // This key was never added, so should throw
+        });
+    }
+
+    @Test
+    void testGetFromEmptyMapThrowsException() {
+        Assertions.assertThrows(NullPointerException.class, () -> {
+            myHashMap.get("anyKey"); // Map is empty, any key should throw
+        });
     }
 }

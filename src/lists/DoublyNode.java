@@ -21,6 +21,18 @@ public class DoublyNode<T> {
         return data;
     }
 
+    public void setPrev(DoublyNode<T> prev) {
+        this.prev = prev;
+    }
+
+    public void setNext(DoublyNode<T> next) {
+        this.next = next;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
+
     public void disconnect() {
         if (next != null) {
             next.prev = null;
