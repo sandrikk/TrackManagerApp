@@ -57,9 +57,8 @@ public class GraphUtils {
 
     public static List<String> findShortestPathDijkstra(WeightedMatrixGraph<String> graph, String startStationCode, String goalStationCode) {
         Map<String, Double> distances = new HashMap<>();
-
         Map<String, String> previous = new HashMap<>();
-
+        Set<String> visited = new HashSet<>();
         PriorityQueue<DijkstraNode> queue = new PriorityQueue<>(Comparator.comparingDouble(DijkstraNode::distance));
 
         for (String vertex : graph.getAllVertices()) {
@@ -67,7 +66,6 @@ public class GraphUtils {
             previous.put(vertex, null);
         }
 
-        // Set the distance for the start station to 0 and add it to the queue
         distances.put(startStationCode, 0.0);
         queue.add(new DijkstraNode(startStationCode, 0.0));
 
@@ -75,17 +73,27 @@ public class GraphUtils {
             DijkstraNode current = queue.poll();
             String currentStationCode = current.code();
 
-            // If the goal station is reached, use the previous map to backtrack the path
+            //Skip this node if it has already been visited
+            if (visited.contains(currentStationCode)) {
+                continue;
+            }
+
+            //Mark the current node as visited
+            visited.add(currentStationCode);
+
+            //If the goal station is reached, use the previous map to backtrack the path
             if (currentStationCode.equals(goalStationCode)) {
                 return reconstructPathDijkstra(previous, goalStationCode);
             }
 
-            // Explore the neighbors of the current station
+            //Explore the neighbors of the current station
             for (String neighbor : graph.getNeighbors(currentStationCode)) {
-                // Calculate what the new distance would be if we went to neighbor via current
+                if (visited.contains(neighbor)) {
+                    continue; // Skip already visited neighbors
+                }
+
                 double alternateDist = distances.get(currentStationCode) + graph.getWeight(currentStationCode, neighbor);
 
-                // If the new distance is shorter, update distances and previous, and add the neighbor to the queue
                 if (alternateDist < distances.get(neighbor)) {
                     distances.put(neighbor, alternateDist);
                     previous.put(neighbor, currentStationCode);
@@ -94,7 +102,6 @@ public class GraphUtils {
             }
         }
 
-        // If the goal station is not reachable from the start station, return an empty list
         return Collections.emptyList();
     }
 
@@ -115,7 +122,7 @@ public class GraphUtils {
                 * Math.pow(Math.sin(dlon / 2), 2);
         double c = 2 * Math.asin(Math.sqrt(a));
 
-        double r = 6371; // Radius of the earth in kilometers. Use 3956 for miles
+        double r = 6371; //Radius of the earth in kilometers. Use 3956 for miles
         return c * r;
     }
 
@@ -124,18 +131,18 @@ public class GraphUtils {
         totalPath.add(current);
         while (cameFrom.containsKey(current)) {
             current = cameFrom.get(current);
-            totalPath.addFirst(current); // Add to the front of the path
+            totalPath.addFirst(current); //Add to the front of the path
         }
         return totalPath;
     }
 
     private static List<String> reconstructPathDijkstra(Map<String, String> previous, String current) {
         List<String> path = new ArrayList<>();
-        while (current != null) { // Traverse the path backwards from goal to start
-            path.add(0, current); // Add each station to the front of the list
-            current = previous.get(current); // Move to the previous station on the path
+        while (current != null) { //Traverse the path backwards from goal to start
+            path.add(0, current); //Add each station to the front of the list
+            current = previous.get(current); //Move to the previous station on the path
         }
-        return path; // Return the reconstructed path
+        return path; //Return the reconstructed path
     }
 
 
