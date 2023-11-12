@@ -52,7 +52,7 @@ public class App {
             System.out.println("5. Sort an ArrayList of connections by length (selectionsort");
             System.out.println("6. A* algorithm");
             System.out.println("7. Dijkstra algorithm");
-            System.out.println("8. Exit");
+            System.out.println("10. Exit");
 
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
@@ -187,8 +187,33 @@ public class App {
                     }
                     break;
                 case 8:
+                    // Get coordinates for the rectangle
+                    System.out.print("Enter the latitude of the first corner: ");
+                    double lat1 = scanner.nextDouble();
+                    System.out.print("Enter the longitude of the first corner: ");
+                    double lon1 = scanner.nextDouble();
+                    System.out.print("Enter the latitude of the opposite corner: ");
+                    double lat2 = scanner.nextDouble();
+                    System.out.print("Enter the longitude of the opposite corner: ");
+                    double lon2 = scanner.nextDouble();
 
-                case 9:
+                    // Create a subgraph with stations within the rectangle
+                    WeightedMatrixGraph<String> subgraph = createSubgraphForRectangle(connectionGraph, lat1, lon1, lat2, lon2);
+
+                    // Find the Minimum Spanning Tree of the subgraph
+                    List<GraphUtils.Edge<String>> mstEdges = GraphUtils.findMinimumSpanningTreePrim(subgraph);
+
+                    double totalLength = 0;
+                    System.out.println("Minimum Track Connections:");
+                    for (GraphUtils.Edge<String> edge : mstEdges) {
+                        totalLength += edge.weight();
+                        System.out.println(edge);
+                    }
+
+                    System.out.println("Total Track Length: " + totalLength);
+                    break;
+
+                case 10:
                     System.out.println("Exiting the program.");
                     scanner.close();
                     System.exit(0);
@@ -258,25 +283,42 @@ public class App {
                 connectionGraph.connect(firstStationCode, secondStationCode, distance);
                 tracksArrayList.add(newTrack);
 
-                //System.out.println("Connection added: " + firstStationCode + " - " + secondStationCode + " with distance " + distance);
-
             }
-
-     /*
-                    MinHeap<Integer> minHeap = new MinHeap<>(Integer.class, 10);
-                    minHeap.push(1);
-                    minHeap.push(2);
-                    minHeap.push(3);
-                    minHeap.push(12);
-                    minHeap.push(98);
-                    minHeap.push(37);
-                    System.out.println(minHeap.graphViz());
-                    break;
-
-                     */
 
         }
 
+    }
+
+    private static boolean isWithinRectangle(double lat, double lon, double lat1, double lon1, double lat2, double lon2) {
+        return Math.min(lat1, lat2) <= lat && lat <= Math.max(lat1, lat2) &&
+                Math.min(lon1, lon2) <= lon && lon <= Math.max(lon1, lon2);
+    }
+
+    private static WeightedMatrixGraph<String> createSubgraphForRectangle(WeightedMatrixGraph<String> originalGraph, double lat1, double lon1, double lat2, double lon2) {
+        List<String> stationsInRectangle = new ArrayList<>();
+
+        // Filter stations within the rectangle
+        for (String stationCode : stationMap.keySet()) {
+            Station station = stationMap.get(stationCode);
+            if (isWithinRectangle(station.getGeoLat(), station.getGeoLng(), lat1, lon1, lat2, lon2)) {
+                stationsInRectangle.add(stationCode);
+            }
+        }
+
+        // Create a subgraph with these stations
+        WeightedMatrixGraph<String> subgraph = new WeightedMatrixGraph<>(originalGraph.isDirected(), stationsInRectangle.toArray(new String[0]));
+
+        // Add edges based on the original graph
+        for (String station1 : stationsInRectangle) {
+            for (String station2 : stationsInRectangle) {
+                if (!station1.equals(station2) && originalGraph.isConnected(station1, station2)) {
+                    double weight = originalGraph.getWeight(station1, station2);
+                    subgraph.connect(station1, station2, weight);
+                }
+            }
+        }
+
+        return subgraph;
     }
 
 

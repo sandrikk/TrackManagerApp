@@ -233,7 +233,13 @@ public class GraphUtils {
         public double weight() {
             return weight;
         }
+
+        @Override
+        public String toString() {
+            return "Edge from " + vertex1 + " to " + vertex2 + " with weight " + weight;
+        }
     }
+
 
 
 
