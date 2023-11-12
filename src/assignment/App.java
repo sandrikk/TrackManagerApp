@@ -187,6 +187,8 @@ public class App {
                     }
                     break;
                 case 8:
+
+                case 9:
                     System.out.println("Exiting the program.");
                     scanner.close();
                     System.exit(0);

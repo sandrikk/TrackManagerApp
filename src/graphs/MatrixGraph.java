@@ -17,6 +17,12 @@ public class MatrixGraph<V> extends AbstractGraph<V> {
         return directed;
     }
 
+    public boolean isConnected(V vertex1, V vertex2) {
+        int index1 = getIndex(vertex1);
+        int index2 = getIndex(vertex2);
+        return connections[index1][index2];
+    }
+
     public void connect(V vertex1, V vertex2) {
         int index1 = getIndex(vertex1);
         int index2 = getIndex(vertex2);
