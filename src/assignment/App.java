@@ -35,13 +35,9 @@ public class App {
                 .toArray(String[]::new);
         connectionGraph = new WeightedMatrixGraph<>(true, stationCodes);
 
-        //System.out.println("Stations added to the graph: " + Arrays.toString(stationCodes));
-
 
         readTracksFromCSV();
         Scanner scanner = new Scanner(System.in);
-
-        System.out.println(connectionGraph.toGraphViz());
 
 
 
@@ -50,7 +46,7 @@ public class App {
             System.out.println("1. Search for a station by name (linear search)");
             System.out.println("2. Search for a station by code (hash table)");
             System.out.println("3. Search for a station by name (binary search)");
-            System.out.println("4. Sort an ArrayList of connections by length (mergesort");
+            System.out.println("4. Sort an ArrayList of connections by length (mergesort)");
             System.out.println("5. Sort an ArrayList of connections by length (selectionsort");
             System.out.println("6. A* algorithm");
             System.out.println("7. Dijkstra algorithm");
